@@ -1,0 +1,51 @@
+# FinPulse — Docker Compose with Neon DB
+# ─────────────────────────────────────────────────────────────────────────────
+# Uses Neon PostgreSQL and FastAPI with Streamlit frontend.
+# Run: docker compose up --build
+# ─────────────────────────────────────────────────────────────────────────────
+
+services:
+
+  # ── FastAPI Backend ──────────────────────────────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: portfolio_backend
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./backend/.env
+    environment:
+      ALLOWED_ORIGINS: '["http://localhost:8501","http://frontend:8501","http://localhost:8501"]'
+    restart: unless-stopped
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+  # ── Streamlit Frontend ───────────────────────────────────────────────────────
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: portfolio_frontend
+    ports:
+      - "8501:8501"
+    environment:
+      API_URL: "http://backend:8000"
+      NEON_AUTH_URL: "https://ep-long-meadow-a10ypauu.neonauth.ap-southeast-1.aws.neon.tech/FinPulse/auth"
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
