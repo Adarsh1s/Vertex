@@ -14,7 +14,8 @@ SQL_FILES = [
     "triggers_functions.sql",
     "views.sql",
     "finpulse_upgrade.sql",
-    "local_auth_upgrade.sql"
+    "local_auth_upgrade.sql",
+    "market_crawler_upgrade.sql"
 ]
 
 async def run_sql_file(session, file_path):

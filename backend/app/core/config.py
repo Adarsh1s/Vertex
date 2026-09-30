@@ -4,7 +4,8 @@ from pydantic import field_validator
 class Settings(BaseSettings):
     DATABASE_URL: str = "postgresql+asyncpg://user:password@localhost/db"
     NEON_AUTH_JWKS_URL: str = "https://example.com/.well-known/jwks.json"
-    LOCAL_AUTH_SECRET: str = "change-this-local-auth-secret-before-production"
+    SECRET_KEY: str = "8Zrw7hFpbUqJ1Dk6Cq4Ltv9sYx2VnM5aR3eW8gKb0jNc7dHs6Pq1Xf4mUa9Bz2"
+    LOCAL_AUTH_SECRET: str = "8Zrw7hFpbUqJ1Dk6Cq4Ltv9sYx2VnM5aR3eW8gKb0jNc7dHs6Pq1Xf4mUa9Bz2"
     LOCAL_AUTH_TOKEN_HOURS: int = 8
     APP_ENV: str = "development"
     ALLOWED_ORIGINS: list[str] = ["http://localhost:8501"]

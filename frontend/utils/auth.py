@@ -19,7 +19,7 @@ def sign_up(name: str, email: str, password: str):
     api_url = get_api_url()
     try:
         res = requests.post(f"{api_url}/auth/sign-up", json={
-            "name": name, "email": email, "password": password
+            "name": name.strip(), "email": email.strip().lower(), "password": password
         }, timeout=20)
         
         try:
@@ -43,7 +43,7 @@ def sign_in(email: str, password: str):
     api_url = get_api_url()
     try:
         res = requests.post(f"{api_url}/auth/sign-in", json={
-            "email": email, "password": password
+            "email": email.strip().lower(), "password": password
         }, timeout=20)
         
         try:

@@ -1,4 +1,4 @@
-# FinPulse — Docker Compose with Neon DB
+# Vertex — Docker Compose with Neon DB
 # ─────────────────────────────────────────────────────────────────────────────
 # Uses Neon PostgreSQL and FastAPI with Streamlit frontend.
 # Run: docker compose up --build
@@ -14,6 +14,8 @@ services:
     container_name: portfolio_backend
     ports:
       - "8000:8000"
+    volumes:
+      - ./backend:/app
     env_file:
       - ./backend/.env
     environment:
@@ -36,9 +38,10 @@ services:
     container_name: portfolio_frontend
     ports:
       - "8501:8501"
+    volumes:
+      - ./frontend:/app
     environment:
       API_URL: "http://backend:8000"
-      NEON_AUTH_URL: "https://ep-long-meadow-a10ypauu.neonauth.ap-southeast-1.aws.neon.tech/FinPulse/auth"
     depends_on:
       backend:
         condition: service_healthy

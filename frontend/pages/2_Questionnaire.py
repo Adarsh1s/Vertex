@@ -1,12 +1,28 @@
 import streamlit as st
 from utils.auth import require_auth
 from utils.api import submit_questionnaire
+from utils.ui import apply_page_style, render_sidebar_brand
 
-st.set_page_config(page_title="Risk Questionnaire", page_icon="📝")
+st.set_page_config(page_title="Risk Questionnaire — Vertex", page_icon="📝", layout="centered")
 require_auth()
+apply_page_style()
+render_sidebar_brand()
 
-st.title("Risk Tolerance Questionnaire")
-st.write("Answer the following 7 questions to determine your risk profile.")
+# Header Banner
+st.markdown("""
+    <div style="margin-bottom: 24px;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+            <span class="badge-chip badge-info">STEP 2 OF 2</span>
+            <span class="badge-chip badge-success">ASSET ALLOCATION CLASSIFIER</span>
+        </div>
+        <h1 style="font-size: 2.2rem; margin-bottom: 4px;">
+            <span class="vertex-gradient-text">Risk Tolerance</span> Questionnaire
+        </h1>
+        <p style="color: #9CA3AF; font-size: 0.95rem; margin: 0;">
+            Answer these 7 psychometric risk questions to map your profile to an asset allocation model.
+        </p>
+    </div>
+""", unsafe_allow_html=True)
 
 questions = [
     {
@@ -36,33 +52,49 @@ questions = [
     },
     {
         "q": "6. How secure is your current primary income?",
-        "opts": ["Not secure at all", "Somewhat secure", "Very secure", "Extremely secure (e.g. Govt job/Tenured)"],
+        "opts": ["Not secure at all", "Somewhat secure", "Very secure", "Extremely secure (Govt job / Established career)"],
         "scores": [0, 5, 10, 14]
     },
     {
-        "q": "7. Imagine a hypothetical investment where you can either gain 50% or lose 20%. Would you take it?",
-        "opts": ["Never", "Maybe, with a small amount", "Probably, with a moderate amount", "Absolutely"],
+        "q": "7. If an investment offers a potential 50% upside but with 20% drawdown risk, would you take it?",
+        "opts": ["Never take risk", "Maybe with a tiny speculative amount", "Probably with moderate allocation", "Absolutely, maximize growth"],
         "scores": [0, 5, 8, 13]
     }
 ]
 
-
-with st.form("questionnaire"):
+with st.form("questionnaire_form"):
     answers = []
     for idx, q_data in enumerate(questions):
-        st.subheader(q_data["q"])
-        ans = st.radio(f"Select one for Q{idx+1}", options=q_data["opts"], key=f"q_{idx}")
+        st.markdown(f"""
+            <div class="vertex-card" style="padding: 18px 22px; margin-bottom: 14px;">
+                <div style="font-size: 1.05rem; font-weight: 700; color: #FFFFFF; margin-bottom: 8px;">{q_data["q"]}</div>
+        """, unsafe_allow_html=True)
+        ans = st.radio(f"Select option for question {idx+1}", options=q_data["opts"], key=f"q_{idx}", label_visibility="collapsed")
         answers.append((ans, q_data))
+        st.markdown('</div>', unsafe_allow_html=True)
         
-    submitted = st.form_submit_button("Submit Answers")
+    st.markdown("<div style='margin-top: 14px;'></div>", unsafe_allow_html=True)
+    submitted = st.form_submit_button("⚡ Submit Answers & Calculate Model", type="primary", use_container_width=True)
     
 if submitted:
     answers_idx = [q["scores"][q["opts"].index(ans)] for ans, q in answers]
-    with st.spinner("Calculating Risk Score..."):
+    with st.spinner("Classifying risk profile in PostgreSQL engine..."):
         res = submit_questionnaire(answers_idx)
         if res.status_code == 200:
             data = res.json()
-            st.success(f"Score calculated successfully: {data['risk_score']}/100")
-            st.info("You're all set! Now you can generate your portfolio.")
+            score = data.get('risk_score', 0)
+            profile_name = data.get('risk_profile_name', 'Moderate')
+            
+            st.markdown(f"""
+                <div class="vertex-card" style="text-align: center; padding: 28px; border-color: rgba(16, 185, 129, 0.4);">
+                    <div style="font-size: 0.82rem; color: #9CA3AF; text-transform: uppercase; font-weight: 600;">CALCULATED RISK SCORE</div>
+                    <div style="font-family: 'Outfit', sans-serif; font-size: 2.8rem; font-weight: 800; color: #34D399; margin: 4px 0;">{score} / 100</div>
+                    <div style="font-size: 1.1rem; font-weight: 700; color: #FFFFFF; margin-bottom: 12px;">Assigned Model: <span style="color: #818CF8;">{profile_name}</span></div>
+                    <p style="color: #9CA3AF; font-size: 0.9rem; max-width: 480px; margin: 0 auto;">Your risk score has been permanently linked to your profile in PostgreSQL. You can now generate your versioned investment portfolio.</p>
+                </div>
+            """, unsafe_allow_html=True)
+            
+            if st.button("🚀 Open Dashboard & Generate Portfolio →", type="primary", use_container_width=True):
+                st.switch_page("pages/3_Dashboard.py")
         else:
-            st.error(f"Failed to submit: {res.text}")
+            st.error(f"Failed to submit questionnaire: {res.text}")

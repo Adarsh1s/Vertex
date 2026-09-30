@@ -108,3 +108,29 @@ def get_alerts():
 def get_rebalancing():
     from utils.auth import get_headers
     return requests.get(f"{API_URL}/finpulse/rebalancing", headers=get_headers())
+
+# ─── Market Data Lake & Partitioned Warehouse ──────────────────────────────────
+def trigger_market_crawl():
+    return requests.post(f"{API_URL}/market/crawl")
+
+def get_raw_market_lake(limit=20, ticker=None):
+    params = {"limit": limit}
+    if ticker:
+        params["ticker"] = ticker
+    return requests.get(f"{API_URL}/market/lake/raw", params=params)
+
+def get_latest_market_prices():
+    return requests.get(f"{API_URL}/market/prices/latest")
+
+def get_partition_telemetry():
+    return requests.get(f"{API_URL}/market/telemetry/partitions")
+
+def get_instrument_history(instrument_id, start_date=None):
+    params = {}
+    if start_date:
+        params["start_date"] = start_date
+    return requests.get(f"{API_URL}/market/history/{instrument_id}", params=params)
+
+def get_portfolio_drift():
+    from utils.auth import get_headers
+    return requests.get(f"{API_URL}/market/portfolio-drift", headers=get_headers())

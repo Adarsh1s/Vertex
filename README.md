@@ -1,4 +1,4 @@
-# 💓 FinPulse — Personal Investment Intelligence & Analytics
+# 🔷 Vertex — Personal Investment Intelligence & Analytics
 
 A modern, full-stack financial intelligence platform that calculates risk-profiled investment portfolios, processes real transaction data through an automated ETL pipeline, and provides financial goal simulations, health scores, and rebalancing alerts.
 
@@ -6,7 +6,7 @@ A modern, full-stack financial intelligence platform that calculates risk-profil
 
 ---
 
-## 🌟 FinPulse Capabilities
+## 🌟 Vertex Capabilities
 
 - **Personalized Portfolio Engine:** Risk-based portfolio allocations tailored for Indian markets (Conservative, Moderate, Aggressive), complete with asset class and instrument-level breakdowns, expected return models (1Y/3Y/5Y), and versioned ACID generation.
 - **Transaction ETL & Personal Data Lake:** Ingestion pipeline for bank/credit CSV statements. Staged for full auditability, validated against schemas, de-duplicated using SHA-256 fingerprints, and auto-classified into semantic categories.
@@ -38,7 +38,7 @@ A modern, full-stack financial intelligence platform that calculates risk-profil
 
 ### Key Architectural Highlights
 1. **Self-Contained FastAPI Auth:** Uses secure PBKDF2-SHA256 password hashing and standard HS256 JWT tokens stored in the database's `app_users` table. Fast, reliable, and completely eliminates third-party auth service downtime and cookie restrictions.
-2. **Port 443 Transparent WebSocket Proxy:** Consumer Wi-Fi and corporate firewalls frequently drop outbound TCP port 5432. FinPulse includes a built-in transparent tunnel (`neon_proxy.py`) that encapsulates PostgreSQL wire protocol over Neon's TLS WebSocket endpoint (`wss://.../v2` on standard port 443).
+2. **Port 443 Transparent WebSocket Proxy:** Consumer Wi-Fi and corporate firewalls frequently drop outbound TCP port 5432. Vertex includes a built-in transparent tunnel (`neon_proxy.py`) that encapsulates PostgreSQL wire protocol over Neon's TLS WebSocket endpoint (`wss://.../v2` on standard port 443).
 3. **Multi-Stage Data Pipeline:** Staged landing (`raw_data_imports` + `stg_transaction_rows`) $\to$ Cleaned transaction store (`financial_transactions`) $\to$ Analytical facts (`fact_monthly_spending_snapshots`).
 
 ---
@@ -144,7 +144,7 @@ cp backend/.env.example backend/.env
 
 Open `backend/.env` and paste your Neon PostgreSQL connection string:
 ```env
-DATABASE_URL=postgresql+asyncpg://<username>:<password>@<neon-host>/FinPulse?sslmode=require
+DATABASE_URL=postgresql+asyncpg://<username>:<password>@<neon-host>/Vertex?sslmode=require
 ```
 
 ### 3. Initialize Database Tables

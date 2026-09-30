@@ -54,29 +54,9 @@ def _classify(description: str, amount: Decimal) -> tuple[str, str]:
 
 
 async def _refresh_spending_snapshot(user_id: str, db: AsyncSession) -> None:
-    await db.execute(text("""
-        INSERT INTO dim_month (month_key, calendar_year, calendar_month, month_name)
-        SELECT DISTINCT date_trunc('month', transaction_date)::date,
-               EXTRACT(YEAR FROM transaction_date)::int, EXTRACT(MONTH FROM transaction_date)::int,
-               TO_CHAR(transaction_date, 'FMMonth')
-        FROM financial_transactions WHERE user_id = :user_id
-        ON CONFLICT (month_key) DO NOTHING
-    """), {"user_id": user_id})
-    await db.execute(text("""
-        INSERT INTO fact_monthly_spending_snapshots
-            (user_id, snapshot_month, income_amount, expense_amount, savings_amount, transaction_count, refreshed_at)
-        SELECT user_id, date_trunc('month', transaction_date)::date,
-               SUM(CASE WHEN transaction_type = 'income' THEN amount ELSE 0 END),
-               SUM(CASE WHEN transaction_type = 'expense' THEN ABS(amount) ELSE 0 END),
-               SUM(CASE WHEN transaction_type = 'income' THEN amount ELSE amount END),
-               COUNT(*), NOW()
-        FROM financial_transactions WHERE user_id = :user_id
-        GROUP BY user_id, date_trunc('month', transaction_date)::date
-        ON CONFLICT (user_id, snapshot_month) DO UPDATE SET
-            income_amount = EXCLUDED.income_amount, expense_amount = EXCLUDED.expense_amount,
-            savings_amount = EXCLUDED.savings_amount, transaction_count = EXCLUDED.transaction_count,
-            refreshed_at = NOW();
-    """), {"user_id": user_id})
+    """Executes the PostgreSQL warehouse ETL stored procedure directly in the database engine."""
+    await db.execute(text("CALL sp_refresh_monthly_spending_facts(:user_id)"), {"user_id": user_id})
+    await db.commit()
 
 
 @router.post("/imports/transactions")
