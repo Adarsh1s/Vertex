@@ -15,7 +15,7 @@ st.markdown("""
         <h1 style="font-size: 3rem; margin-bottom: 8px; font-weight: 800; letter-spacing: -0.03em;">
             <span class="vertex-gradient-text">VERTEX</span>
         </h1>
-        <p style="font-size: 1.1rem; color: #9CA3AF; max-width: 540px; margin: 0 auto; line-height: 1.5;">
+        <p style="font-size: 1.1rem; color: var(--text-secondary); max-width: 540px; margin: 0 auto; line-height: 1.5;">
             Autonomous Multi-Tier Financial Lakehouse & Real-Time Portfolio Intelligence Engine
         </p>
     </div>
@@ -30,9 +30,9 @@ if "token" in st.session_state:
             <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #6366F1, #A855F7); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px auto; font-size: 1.8rem; box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);">
                 👤
             </div>
-            <h2 style="margin-bottom: 4px; font-size: 1.6rem;">Welcome back, {user_name}!</h2>
-            <div style="color: #9CA3AF; font-size: 0.9rem; margin-bottom: 24px;">{user_email}</div>
-            <div style="display: inline-block; padding: 4px 12px; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 9999px; color: #34D399; font-size: 0.8rem; font-weight: 600;">
+            <h2 style="margin-bottom: 4px; font-size: 1.6rem; color: var(--text-primary);">Welcome back, {user_name}!</h2>
+            <div style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 24px;">{user_email}</div>
+            <div style="display: inline-block; padding: 4px 12px; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 9999px; color: #10B981; font-size: 0.8rem; font-weight: 600;">
                 🟢 Session Authenticated (HS256 Bearer JWT)
             </div>
         </div>
@@ -56,18 +56,18 @@ else:
         <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 28px;">
             <div class="vertex-metric-box" style="text-align: center; padding: 14px 10px;">
                 <div style="font-size: 1.4rem; margin-bottom: 4px;">🕷️</div>
-                <div style="font-size: 0.8rem; font-weight: 700; color: #E5E7EB;">Stealth Crawler</div>
-                <div style="font-size: 0.72rem; color: #9CA3AF;">AMFI & NSE Live Feeds</div>
+                <div style="font-size: 0.82rem; font-weight: 700; color: var(--text-primary);">Stealth Crawler</div>
+                <div style="font-size: 0.72rem; color: var(--text-secondary);">AMFI & NSE Live Feeds</div>
             </div>
             <div class="vertex-metric-box" style="text-align: center; padding: 14px 10px;">
                 <div style="font-size: 1.4rem; margin-bottom: 4px;">🏛️</div>
-                <div style="font-size: 0.8rem; font-weight: 700; color: #E5E7EB;">3-Tier Lakehouse</div>
-                <div style="font-size: 0.72rem; color: #9CA3AF;">Bronze • Silver • Gold</div>
+                <div style="font-size: 0.82rem; font-weight: 700; color: var(--text-primary);">3-Tier Lakehouse</div>
+                <div style="font-size: 0.72rem; color: var(--text-secondary);">Bronze • Silver • Gold</div>
             </div>
             <div class="vertex-metric-box" style="text-align: center; padding: 14px 10px;">
                 <div style="font-size: 1.4rem; margin-bottom: 4px;">⚡</div>
-                <div style="font-size: 0.8rem; font-weight: 700; color: #E5E7EB;">PL/pgSQL Engine</div>
-                <div style="font-size: 0.72rem; color: #9CA3AF;">In-Database Triggers</div>
+                <div style="font-size: 0.82rem; font-weight: 700; color: var(--text-primary);">PL/pgSQL Engine</div>
+                <div style="font-size: 0.72rem; color: var(--text-secondary);">In-Database Triggers</div>
             </div>
         </div>
     """, unsafe_allow_html=True)

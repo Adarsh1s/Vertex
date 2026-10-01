@@ -1,127 +1,188 @@
 import streamlit as st
 
+def render_theme_toggle():
+    """Renders a clean Light/Dark theme toggle in the sidebar."""
+    current_theme = st.session_state.get("theme_mode", "dark")
+    is_light = (current_theme == "light")
+    
+    with st.sidebar:
+        # Subtle separator before appearance control
+        st.markdown("<div style='height: 1px; background: rgba(255,255,255,0.06); margin: 16px 0 12px 0;'></div>", unsafe_allow_html=True)
+        toggle_val = st.toggle("☀️ Light Mode" if is_light else "🌙 Dark Mode", value=is_light, key="app_theme_toggle")
+        if toggle_val != is_light:
+            st.session_state["theme_mode"] = "light" if toggle_val else "dark"
+            st.rerun()
+
+
 def apply_page_style():
-    """Injects Vertex's global design system: Google Fonts, Glassmorphism, and custom component CSS."""
-    st.markdown("""
+    """Injects Vertex's global design system with Dark/Light theme and zero layout distortion."""
+    theme = st.session_state.get("theme_mode", "dark")
+    is_light = (theme == "light")
+    
+    # Colors per theme
+    if is_light:
+        bg_main = "#F8FAFC"
+        sidebar_bg = "#FFFFFF"
+        text_primary = "#0F172A"
+        text_secondary = "#64748B"
+        text_muted = "#94A3B8"
+        card_bg = "#FFFFFF"
+        card_border = "rgba(0, 0, 0, 0.08)"
+        card_shadow = "0 4px 20px 0 rgba(0, 0, 0, 0.05)"
+        metric_bg = "#F1F5F9"
+        metric_border = "rgba(0, 0, 0, 0.06)"
+        input_bg = "#FFFFFF"
+        input_border = "#CBD5E1"
+        badge_bg = "rgba(99, 102, 241, 0.1)"
+        badge_color = "#4F46E5"
+        badge_border = "rgba(99, 102, 241, 0.25)"
+    else:
+        bg_main = "#0B0F19"
+        sidebar_bg = "#0F172A"
+        text_primary = "#F9FAFB"
+        text_secondary = "#9CA3AF"
+        text_muted = "#6B7280"
+        card_bg = "rgba(17, 24, 39, 0.75)"
+        card_border = "rgba(255, 255, 255, 0.08)"
+        card_shadow = "0 8px 32px 0 rgba(0, 0, 0, 0.37)"
+        metric_bg = "rgba(31, 41, 55, 0.6)"
+        metric_border = "rgba(255, 255, 255, 0.06)"
+        input_bg = "rgba(17, 24, 39, 0.9)"
+        input_border = "rgba(255, 255, 255, 0.12)"
+        badge_bg = "rgba(99, 102, 241, 0.15)"
+        badge_color = "#818CF8"
+        badge_border = "rgba(99, 102, 241, 0.3)"
+
+    st.markdown(f"""
         <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap');
 
-        /* Global Typography */
-        html, body, [class*="css"] {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            color: #F9FAFB;
-        }
+        :root {{
+            --bg-main: {bg_main};
+            --sidebar-bg: {sidebar_bg};
+            --text-primary: {text_primary};
+            --text-secondary: {text_secondary};
+            --text-muted: {text_muted};
+            --card-bg: {card_bg};
+            --card-border: {card_border};
+            --card-shadow: {card_shadow};
+            --metric-bg: {metric_bg};
+            --metric-border: {metric_border};
+            --input-bg: {input_bg};
+            --input-border: {input_border};
+        }}
 
-        h1, h2, h3, h4, h5, h6 {
+        /* App Background & Typography */
+        .stApp, html, body, [class*="css"] {{
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-main) !important;
+            color: var(--text-primary) !important;
+        }}
+
+        h1, h2, h3, h4, h5, h6 {{
             font-family: 'Outfit', sans-serif !important;
             font-weight: 700 !important;
             letter-spacing: -0.02em;
-        }
+            color: var(--text-primary) !important;
+        }}
+
+        p, span, label, div {{
+            color: var(--text-primary);
+        }}
 
         /* Gradient Text Accents */
-        .vertex-gradient-text {
+        .vertex-gradient-text {{
             background: linear-gradient(135deg, #818CF8 0%, #C084FC 50%, #F472B6 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             font-weight: 800;
-        }
+        }}
 
-        /* Glassmorphic Surface Cards */
-        .vertex-card {
-            background: rgba(17, 24, 39, 0.75);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+        /* Cards */
+        .vertex-card {{
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
             border-radius: 16px;
-            padding: 24px;
+            padding: 22px 24px;
             margin-bottom: 20px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-            transition: transform 0.2s ease, border-color 0.2s ease;
-        }
-        .vertex-card:hover {
-            border-color: rgba(99, 102, 241, 0.35);
-            transform: translateY(-2px);
-        }
+            box-shadow: var(--card-shadow);
+            transition: border-color 0.2s ease;
+        }}
 
-        /* Mini Metric Pill Cards */
-        .vertex-metric-box {
-            background: rgba(31, 41, 55, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.06);
+        /* Mini Metric Box */
+        .vertex-metric-box {{
+            background: var(--metric-bg);
+            border: 1px solid var(--metric-border);
             border-radius: 12px;
             padding: 16px 20px;
             margin-bottom: 12px;
-        }
-        .vertex-metric-label {
+        }}
+        .vertex-metric-label {{
             font-size: 0.82rem;
-            color: #9CA3AF;
+            color: var(--text-secondary);
             text-transform: uppercase;
             letter-spacing: 0.05em;
             font-weight: 600;
             margin-bottom: 4px;
-        }
-        .vertex-metric-val {
+        }}
+        .vertex-metric-val {{
             font-family: 'Outfit', sans-serif;
             font-size: 1.6rem;
             font-weight: 700;
-            color: #FFFFFF;
-        }
-        .vertex-metric-delta-pos {
+            color: var(--text-primary);
+        }}
+        .vertex-metric-delta-pos {{
             font-size: 0.85rem;
-            color: #34D399;
+            color: #10B981;
             font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-        }
-        .vertex-metric-delta-neg {
+        }}
+        .vertex-metric-delta-neg {{
             font-size: 0.85rem;
-            color: #F87171;
+            color: #EF4444;
             font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-        }
+        }}
 
         /* Status Badges */
-        .badge-chip {
+        .badge-chip {{
             display: inline-block;
             padding: 4px 10px;
             border-radius: 9999px;
             font-size: 0.75rem;
             font-weight: 600;
             letter-spacing: 0.02em;
-        }
-        .badge-success {
+        }}
+        .badge-success {{
             background: rgba(16, 185, 129, 0.15);
-            color: #34D399;
+            color: #10B981;
             border: 1px solid rgba(16, 185, 129, 0.3);
-        }
-        .badge-warning {
+        }}
+        .badge-warning {{
             background: rgba(245, 158, 11, 0.15);
-            color: #FBBF24;
+            color: #F59E0B;
             border: 1px solid rgba(245, 158, 11, 0.3);
-        }
-        .badge-info {
-            background: rgba(99, 102, 241, 0.15);
-            color: #818CF8;
-            border: 1px solid rgba(99, 102, 241, 0.3);
-        }
+        }}
+        .badge-info {{
+            background: {badge_bg};
+            color: {badge_color};
+            border: 1px solid {badge_border};
+        }}
 
-        /* Streamlit Input & Form Upgrades */
-        .stTextInput input, .stNumberInput input, .stSelectbox select {
-            background-color: rgba(17, 24, 39, 0.9) !important;
-            border: 1px solid rgba(255, 255, 255, 0.12) !important;
+        /* Inputs & Form Controls */
+        .stTextInput input, .stNumberInput input, .stSelectbox select, .stDateInput input {{
+            background-color: var(--input-bg) !important;
+            border: 1px solid var(--input-border) !important;
             border-radius: 10px !important;
-            color: #F9FAFB !important;
+            color: var(--text-primary) !important;
             padding: 10px 14px !important;
-        }
-        .stTextInput input:focus, .stNumberInput input:focus {
+            box-sizing: border-box !important;
+        }}
+        .stTextInput input:focus, .stNumberInput input:focus {{
             border-color: #6366F1 !important;
             box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.25) !important;
-        }
+        }}
 
-        /* Primary Button Glow */
-        .stButton>button[kind="primary"] {
+        /* Buttons */
+        .stButton>button[kind="primary"] {{
             background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%) !important;
             color: #FFFFFF !important;
             border: none !important;
@@ -129,82 +190,82 @@ def apply_page_style():
             font-weight: 600 !important;
             padding: 10px 24px !important;
             box-shadow: 0 4px 14px 0 rgba(79, 70, 229, 0.35) !important;
-            transition: all 0.2s ease !important;
-        }
-        .stButton>button[kind="primary"]:hover {
-            transform: translateY(-1px) !important;
-            box-shadow: 0 6px 20px 0 rgba(79, 70, 229, 0.5) !important;
-        }
-
-        /* Secondary Button */
-        .stButton>button:not([kind="primary"]) {
-            background: rgba(31, 41, 55, 0.7) !important;
-            border: 1px solid rgba(255, 255, 255, 0.12) !important;
+        }}
+        .stButton>button:not([kind="primary"]) {{
+            background: var(--metric-bg) !important;
+            border: 1px solid var(--card-border) !important;
             border-radius: 10px !important;
-            color: #E5E7EB !important;
-            transition: all 0.2s ease !important;
-        }
-        .stButton>button:not([kind="primary"]):hover {
-            border-color: #818CF8 !important;
-            color: #FFFFFF !important;
-            transform: translateY(-1px) !important;
-        }
+            color: var(--text-primary) !important;
+        }}
 
-        /* Tabs Polish */
-        .stTabs [data-baseweb="tab-list"] {
-            gap: 8px;
-            background-color: transparent;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        .stTabs [data-baseweb="tab"] {
-            border-radius: 8px 8px 0 0;
-            padding: 10px 18px;
-            font-weight: 600;
-            color: #9CA3AF;
-        }
-        .stTabs [aria-selected="true"] {
-            color: #818CF8 !important;
-            border-bottom: 2px solid #818CF8 !important;
-            background-color: rgba(99, 102, 241, 0.08) !important;
-        }
-
-        /* Glassmorphic Form & Bordered Container Upgrades */
-        [data-testid="stForm"], div[data-testid="stVerticalBlockBorderWrapper"] > div {
-            background: rgba(17, 24, 39, 0.75) !important;
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        /* Clean Native Streamlit Form Card */
+        [data-testid="stForm"] {{
+            background: var(--card-bg) !important;
+            border: 1px solid var(--card-border) !important;
             border-radius: 16px !important;
             padding: 24px !important;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-        }
+            box-shadow: var(--card-shadow) !important;
+        }}
 
-        /* Sidebar Styling */
-        section[data-testid="stSidebar"] {
-            background-color: #0B0F19 !important;
-            border-right: 1px solid rgba(255, 255, 255, 0.06);
-        }
+        /* Main Content Bordered Containers - Clean single border */
+        .main div[data-testid="stVerticalBlockBorderWrapper"] {{
+            background: var(--card-bg) !important;
+            border: 1px solid var(--card-border) !important;
+            border-radius: 16px !important;
+            padding: 20px !important;
+            box-shadow: var(--card-shadow) !important;
+        }}
+        .main div[data-testid="stVerticalBlockBorderWrapper"] > div {{
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+            padding: 0 !important;
+        }}
 
-        /* Custom Scrollbars */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: rgba(11, 15, 25, 0.5);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 3px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(99, 102, 241, 0.5);
-        }
+        /* Sidebar Styling - Completely Clean */
+        section[data-testid="stSidebar"] {{
+            background-color: var(--sidebar-bg) !important;
+            border-right: 1px solid var(--card-border) !important;
+        }}
+        /* Strictly eliminate ANY rogue box or card under sidebar options */
+        section[data-testid="stSidebar"] div[data-testid="stVerticalBlockBorderWrapper"],
+        section[data-testid="stSidebar"] div[data-testid="stVerticalBlockBorderWrapper"] > div {{
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }}
+
+        /* Question Item Separator */
+        .vertex-question-item {{
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--card-border);
+            margin-bottom: 8px;
+        }}
+        .vertex-question-item:last-child {{
+            border-bottom: none;
+        }}
+
+        /* Tabs */
+        .stTabs [data-baseweb="tab-list"] {{
+            background-color: transparent;
+            border-bottom: 1px solid var(--card-border);
+        }}
+        .stTabs [data-baseweb="tab"] {{
+            color: var(--text-secondary);
+        }}
+        .stTabs [aria-selected="true"] {{
+            color: #6366F1 !important;
+            border-bottom: 2px solid #6366F1 !important;
+        }}
         </style>
     """, unsafe_allow_html=True)
 
+    # Render Theme toggle in the sidebar
+    render_theme_toggle()
+
 
 def render_sidebar_brand():
-    """Clean sidebar without persistent lakehouse widget (removed per user preference)."""
+    """Empty brand function preserved for backwards compatibility."""
     pass
-
