@@ -108,24 +108,30 @@ with col_sim:
                 simulation = get_goal_simulation(goal["goal_id"])
                 if simulation.status_code == 200:
                     data = simulation.json()
+                    target_amt = float(data.get('target_amount', goal.get('target_amount', 0)))
+                    current_amt = float(data.get('current_amount', goal.get('current_amount', 0)))
+                    sip_amt = float(data.get('monthly_investment_needed', 0))
+                    months_left = data.get('months_remaining', 0)
+                    goal_title = data.get('goal_name', goal.get('goal_name', 'Goal'))
+
                     st.markdown(f"""
                         <div class="vertex-metric-box" style="padding: 18px 20px; margin-top: 14px;">
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                                <strong style="font-family: 'Outfit', sans-serif; font-size: 1.15rem; color: #0F172A;">🎯 {data['goal_name']}</strong>
-                                <span class="badge-chip badge-info">{data['months_remaining']} Months Left</span>
+                                <strong style="font-family: 'Outfit', sans-serif; font-size: 1.15rem; color: #0F172A;">🎯 {goal_title}</strong>
+                                <span class="badge-chip badge-info">{months_left} Months Left</span>
                             </div>
                             <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px;">
                                 <div>
                                     <div style="font-size: 0.72rem; color: #64748B; text-transform: uppercase; font-weight: 600;">Target Amount</div>
-                                    <div style="font-family: 'Outfit', sans-serif; font-size: 1.1rem; font-weight: 700; color: #0F172A;">₹{float(data['target_amount']):,.0f}</div>
+                                    <div style="font-family: 'Outfit', sans-serif; font-size: 1.1rem; font-weight: 700; color: #0F172A;">₹{target_amt:,.0f}</div>
                                 </div>
                                 <div>
                                     <div style="font-size: 0.72rem; color: #64748B; text-transform: uppercase; font-weight: 600;">Already Saved</div>
-                                    <div style="font-family: 'Outfit', sans-serif; font-size: 1.1rem; font-weight: 700; color: #475569;">₹{float(data['current_amount']):,.0f}</div>
+                                    <div style="font-family: 'Outfit', sans-serif; font-size: 1.1rem; font-weight: 700; color: #475569;">₹{current_amt:,.0f}</div>
                                 </div>
                                 <div>
                                     <div style="font-size: 0.72rem; color: #15803D; text-transform: uppercase; font-weight: 700;">Monthly SIP</div>
-                                    <div style="font-family: 'Outfit', sans-serif; font-size: 1.15rem; font-weight: 800; color: #15803D;">₹{data['monthly_investment_needed']:,.0f}</div>
+                                    <div style="font-family: 'Outfit', sans-serif; font-size: 1.15rem; font-weight: 800; color: #15803D;">₹{sip_amt:,.0f}</div>
                                 </div>
                             </div>
                         </div>

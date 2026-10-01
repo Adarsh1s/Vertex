@@ -160,10 +160,16 @@ async def simulate_goal(goal_id: int, user_id: str = Depends(get_current_user), 
     future_value_of_current = float(goal["current_amount"]) * (1 + monthly_rate) ** months
     remaining = max(0, float(goal["target_amount"]) - future_value_of_current)
     monthly_needed = remaining / months if monthly_rate == 0 else remaining * monthly_rate / ((1 + monthly_rate) ** months - 1)
-    return {"goal_id": goal_id, "goal_name": goal["goal_name"], "months_remaining": months,
-            "target_amount": goal["target_amount"], "projected_current_amount": round(future_value_of_current, 2),
-            "monthly_investment_needed": round(monthly_needed, 2),
-            "on_track": float(goal["current_amount"]) >= float(goal["target_amount"])}
+    return {
+        "goal_id": goal_id,
+        "goal_name": goal["goal_name"],
+        "months_remaining": months,
+        "target_amount": float(goal["target_amount"]),
+        "current_amount": float(goal["current_amount"]),
+        "projected_current_amount": round(future_value_of_current, 2),
+        "monthly_investment_needed": round(monthly_needed, 2),
+        "on_track": float(goal["current_amount"]) >= float(goal["target_amount"])
+    }
 
 
 @router.get("/health")
