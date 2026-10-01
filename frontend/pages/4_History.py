@@ -19,7 +19,7 @@ st.markdown("""
         <h1 style="font-size: 2.2rem; margin-bottom: 4px;">
             <span class="vertex-gradient-text">Portfolio Revision</span> History
         </h1>
-        <p style="color: #9CA3AF; font-size: 0.95rem; margin: 0;">
+        <p style="color: #475569; font-size: 0.95rem; margin: 0;">
             Track historical versions of your investment allocations, rebalancing events, and audit timestamps.
         </p>
     </div>
@@ -32,8 +32,7 @@ if res.status_code == 200:
     data = res.json()
     if not data:
         st.info("You haven't generated any portfolios yet. Head to the Dashboard to create version 1.")
-        if st.button("Open Dashboard →", type="primary"):
-            st.switch_page("pages/3_Dashboard.py")
+        st.page_link("pages/3_Dashboard.py", label="Open Dashboard →", icon="📊")
     else:
         df = pd.DataFrame(data)
         total_revisions = len(df)
@@ -46,15 +45,15 @@ if res.status_code == 200:
                 <div class="vertex-card" style="padding: 16px;">
                     <div class="vertex-metric-label">Total Revisions</div>
                     <div class="vertex-metric-val">{total_revisions}</div>
-                    <div style="font-size: 0.75rem; color: #9CA3AF; margin-top: 2px;">Versioned Generations</div>
+                    <div style="font-size: 0.75rem; color: #64748B; margin-top: 2px;">Versioned Generations</div>
                 </div>
             """, unsafe_allow_html=True)
         with m2:
             st.markdown(f"""
                 <div class="vertex-card" style="padding: 16px;">
                     <div class="vertex-metric-label">Active Version</div>
-                    <div class="vertex-metric-val" style="color: #34D399;">v{current_v}</div>
-                    <div style="font-size: 0.75rem; color: #34D399; margin-top: 2px;">Currently Live Model</div>
+                    <div class="vertex-metric-val" style="color: #15803D;">v{current_v}</div>
+                    <div style="font-size: 0.75rem; color: #15803D; margin-top: 2px;">Currently Live Model</div>
                 </div>
             """, unsafe_allow_html=True)
         with m3:
@@ -62,7 +61,7 @@ if res.status_code == 200:
                 <div class="vertex-card" style="padding: 16px;">
                     <div class="vertex-metric-label">Integrity Status</div>
                     <div style="margin: 6px 0 4px 0;"><span class="badge-chip badge-success">ACID AUDIT ENFORCED</span></div>
-                    <div style="font-size: 0.75rem; color: #9CA3AF;">Database Triggers Active</div>
+                    <div style="font-size: 0.75rem; color: #64748B;">Database Triggers Active</div>
                 </div>
             """, unsafe_allow_html=True)
             

@@ -21,7 +21,7 @@ st.markdown("""
         <h1 style="font-size: 2.2rem; margin-bottom: 4px;">
             <span class="vertex-gradient-text">Financial Goals</span> & Health Intelligence
         </h1>
-        <p style="color: #9CA3AF; font-size: 0.95rem; margin: 0;">
+        <p style="color: #475569; font-size: 0.95rem; margin: 0;">
             Multi-vector financial health assessment computed in PostgreSQL and geometric milestone projections.
         </p>
     </div>
@@ -35,33 +35,31 @@ if health_res.status_code == 200:
     band = health.get('band', 'N/A')
     savings_rate = health.get('savings_rate_pct', 0)
     
-    score_color = "#10B981" if score >= 75 else ("#F59E0B" if score >= 50 else "#EF4444")
+    score_color = "#15803D" if score >= 75 else ("#D97706" if score >= 50 else "#DC2626")
     
-    st.markdown(f"""
-        <div class="vertex-card" style="padding: 24px;">
-            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-bottom: 16px;">
+    with st.container(border=True):
+        st.markdown(f"""
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-bottom: 14px;">
                 <div>
                     <div class="vertex-metric-label">VERTEX COMPOSITE HEALTH SCORE</div>
                     <div style="display: flex; align-items: baseline; gap: 8px;">
                         <span style="font-family: 'Outfit', sans-serif; font-size: 3rem; font-weight: 800; color: {score_color};">{score}</span>
-                        <span style="font-size: 1.2rem; color: #9CA3AF; font-weight: 600;">/ 100</span>
+                        <span style="font-size: 1.2rem; color: #64748B; font-weight: 600;">/ 100</span>
                     </div>
                 </div>
                 <div style="text-align: right;">
                     <div class="vertex-metric-label">RATING BAND</div>
-                    <span class="badge-chip" style="background: rgba(99, 102, 241, 0.2); color: #818CF8; border: 1px solid rgba(99, 102, 241, 0.4); font-size: 1rem; padding: 6px 16px;">
+                    <span class="badge-chip badge-info" style="font-size: 0.95rem; padding: 6px 16px;">
                         {band.upper()}
                     </span>
-                    <div style="font-size: 0.82rem; color: #9CA3AF; margin-top: 6px;">
-                        Savings Rate: <strong style="color: #34D399;">{savings_rate}%</strong>
+                    <div style="font-size: 0.85rem; color: #475569; margin-top: 6px;">
+                        Savings Rate: <strong style="color: #15803D;">{savings_rate}%</strong>
                     </div>
                 </div>
             </div>
-    """, unsafe_allow_html=True)
-    
-    st.progress(score / 100)
-    st.caption("Evaluates 4 database vectors: 6-month historical savings rate, active asset diversification, goal funding coverage, and liquidity runway.")
-    st.markdown("</div>", unsafe_allow_html=True)
+        """, unsafe_allow_html=True)
+        st.progress(score / 100)
+        st.caption("Evaluates 4 database vectors: 6-month historical savings rate, active asset diversification, goal funding coverage, and liquidity runway.")
 
 # Two-Column Layout: Add Goal & Active Goals
 col_new, col_sim = st.columns([1, 1])
@@ -113,21 +111,21 @@ with col_sim:
                     st.markdown(f"""
                         <div class="vertex-metric-box" style="padding: 18px 20px; margin-top: 14px;">
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                                <strong style="font-family: 'Outfit', sans-serif; font-size: 1.15rem; color: #FFFFFF;">🎯 {data['goal_name']}</strong>
+                                <strong style="font-family: 'Outfit', sans-serif; font-size: 1.15rem; color: #0F172A;">🎯 {data['goal_name']}</strong>
                                 <span class="badge-chip badge-info">{data['months_remaining']} Months Left</span>
                             </div>
                             <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px;">
                                 <div>
-                                    <div style="font-size: 0.72rem; color: #9CA3AF; text-transform: uppercase;">Target Amount</div>
-                                    <div style="font-family: 'Outfit', sans-serif; font-size: 1.1rem; font-weight: 700; color: #E5E7EB;">₹{float(data['target_amount']):,.0f}</div>
+                                    <div style="font-size: 0.72rem; color: #64748B; text-transform: uppercase; font-weight: 600;">Target Amount</div>
+                                    <div style="font-family: 'Outfit', sans-serif; font-size: 1.1rem; font-weight: 700; color: #0F172A;">₹{float(data['target_amount']):,.0f}</div>
                                 </div>
                                 <div>
-                                    <div style="font-size: 0.72rem; color: #9CA3AF; text-transform: uppercase;">Already Saved</div>
-                                    <div style="font-family: 'Outfit', sans-serif; font-size: 1.1rem; font-weight: 700; color: #9CA3AF;">₹{float(data['current_amount']):,.0f}</div>
+                                    <div style="font-size: 0.72rem; color: #64748B; text-transform: uppercase; font-weight: 600;">Already Saved</div>
+                                    <div style="font-family: 'Outfit', sans-serif; font-size: 1.1rem; font-weight: 700; color: #475569;">₹{float(data['current_amount']):,.0f}</div>
                                 </div>
                                 <div>
-                                    <div style="font-size: 0.72rem; color: #34D399; text-transform: uppercase; font-weight: 600;">Monthly SIP</div>
-                                    <div style="font-family: 'Outfit', sans-serif; font-size: 1.15rem; font-weight: 800; color: #34D399;">₹{data['monthly_investment_needed']:,.0f}</div>
+                                    <div style="font-size: 0.72rem; color: #15803D; text-transform: uppercase; font-weight: 700;">Monthly SIP</div>
+                                    <div style="font-family: 'Outfit', sans-serif; font-size: 1.15rem; font-weight: 800; color: #15803D;">₹{data['monthly_investment_needed']:,.0f}</div>
                                 </div>
                             </div>
                         </div>

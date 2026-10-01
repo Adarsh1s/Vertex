@@ -18,7 +18,7 @@ st.markdown("""
         <h1 style="font-size: 2.2rem; margin-bottom: 4px;">
             <span class="vertex-gradient-text">Financial Baseline</span> Onboarding
         </h1>
-        <p style="color: #9CA3AF; font-size: 0.95rem; margin: 0;">
+        <p style="color: #475569; font-size: 0.95rem; margin: 0;">
             Provide your monthly cashflow and capital parameters to configure your portfolio model.
         </p>
     </div>
@@ -88,21 +88,25 @@ if submit_btn:
         if profile_exists:
             update_res = update_profile(payload)
             if update_res.status_code == 200:
-                st.success("Financial profile updated successfully!")
-                c_a, c_b = st.columns(2)
-                with c_a:
-                    if st.button("Proceed to Risk Questionnaire →", type="primary", use_container_width=True):
-                        st.switch_page("pages/2_Questionnaire.py")
-                with c_b:
-                    if st.button("Go to Dashboard", use_container_width=True):
-                        st.switch_page("pages/3_Dashboard.py")
+                st.session_state["onboarding_success"] = True
+                st.session_state["onboarding_msg"] = "Financial profile updated successfully!"
+                st.rerun()
             else:
                 st.error(f"Failed to update profile: {update_res.text}")
         else:
             create_res = create_profile(payload)
             if create_res.status_code == 200:
-                st.success("Financial profile created successfully! Now take the Risk Questionnaire.")
-                if st.button("Continue to Step 2: Risk Questionnaire →", type="primary", use_container_width=True):
-                    st.switch_page("pages/2_Questionnaire.py")
+                st.session_state["onboarding_success"] = True
+                st.session_state["onboarding_msg"] = "Financial profile created successfully! Proceed to Step 2 to configure your portfolio."
+                st.rerun()
             else:
                 st.error(f"Failed to create profile: {create_res.text}")
+
+if st.session_state.get("onboarding_success"):
+    st.markdown("<div style='margin-top: 18px;'></div>", unsafe_allow_html=True)
+    st.success(st.session_state.get("onboarding_msg", "Financial profile saved successfully!"))
+    c_a, c_b = st.columns(2)
+    with c_a:
+        st.page_link("pages/2_Questionnaire.py", label="Proceed to Risk Questionnaire →", icon="📝", use_container_width=True)
+    with c_b:
+        st.page_link("pages/3_Dashboard.py", label="Go to Dashboard", icon="📊", use_container_width=True)

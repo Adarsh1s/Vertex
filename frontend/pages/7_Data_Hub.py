@@ -28,7 +28,7 @@ st.markdown("""
         <h1 style="font-size: 2.2rem; margin-bottom: 4px;">
             <span class="vertex-gradient-text">Unified Lakehouse</span> & Ingestion Data Hub
         </h1>
-        <p style="color: #9CA3AF; font-size: 0.95rem; margin: 0;">
+        <p style="color: #475569; font-size: 0.95rem; margin: 0;">
             Bronze Semi-Structured JSONB Lake • Silver Declarative Partitioned Store • Gold OLAP Materialized Analytics
         </p>
     </div>
@@ -37,20 +37,20 @@ st.markdown("""
 # 3-Tier Visual Architecture Cards
 st.markdown("""
     <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 24px;">
-        <div class="vertex-card" style="padding: 18px; margin-bottom: 0; border-top: 3px solid #CD7F32;">
-            <div style="font-size: 0.75rem; color: #CD7F32; font-weight: 700; text-transform: uppercase;">1. BRONZE TIER</div>
-            <div style="font-size: 1.1rem; font-weight: 700; color: #FFFFFF; margin: 4px 0;">Semi-Structured Lake</div>
-            <div style="font-size: 0.8rem; color: #9CA3AF;">raw_market_scrapes & staging rows stored as JSONB with GIN path indexing.</div>
+        <div class="vertex-card" style="padding: 18px; margin-bottom: 0; border-top: 3px solid #B45309;">
+            <div style="font-size: 0.75rem; color: #B45309; font-weight: 700; text-transform: uppercase;">1. BRONZE TIER</div>
+            <div style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin: 4px 0;">Semi-Structured Lake</div>
+            <div style="font-size: 0.82rem; color: #475569;">raw_market_scrapes & staging rows stored as JSONB with GIN path indexing.</div>
         </div>
-        <div class="vertex-card" style="padding: 18px; margin-bottom: 0; border-top: 3px solid #C0C0C0;">
-            <div style="font-size: 0.75rem; color: #E5E7EB; font-weight: 700; text-transform: uppercase;">2. SILVER TIER</div>
-            <div style="font-size: 1.1rem; font-weight: 700; color: #FFFFFF; margin: 4px 0;">Partitioned Store</div>
-            <div style="font-size: 0.8rem; color: #9CA3AF;">market_price_history partitioned by date range (2025, 2026, future) + BRIN.</div>
+        <div class="vertex-card" style="padding: 18px; margin-bottom: 0; border-top: 3px solid #64748B;">
+            <div style="font-size: 0.75rem; color: #475569; font-weight: 700; text-transform: uppercase;">2. SILVER TIER</div>
+            <div style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin: 4px 0;">Partitioned Store</div>
+            <div style="font-size: 0.82rem; color: #475569;">market_price_history partitioned by date range (2025, 2026, future) + BRIN.</div>
         </div>
-        <div class="vertex-card" style="padding: 18px; margin-bottom: 0; border-top: 3px solid #F59E0B;">
-            <div style="font-size: 0.75rem; color: #F59E0B; font-weight: 700; text-transform: uppercase;">3. GOLD TIER</div>
-            <div style="font-size: 1.1rem; font-weight: 700; color: #FFFFFF; margin: 4px 0;">OLAP Materialized Views</div>
-            <div style="font-size: 0.8rem; color: #9CA3AF;">mv_instrument_performance_metrics refreshed concurrently inside PostgreSQL.</div>
+        <div class="vertex-card" style="padding: 18px; margin-bottom: 0; border-top: 3px solid #D97706;">
+            <div style="font-size: 0.75rem; color: #D97706; font-weight: 700; text-transform: uppercase;">3. GOLD TIER</div>
+            <div style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin: 4px 0;">OLAP Materialized Views</div>
+            <div style="font-size: 0.82rem; color: #475569;">mv_instrument_performance_metrics refreshed concurrently inside PostgreSQL.</div>
         </div>
     </div>
 """, unsafe_allow_html=True)
@@ -66,7 +66,7 @@ with tab_market:
             <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
                 <div>
                     <h3 style="font-size: 1.2rem; margin-bottom: 4px;">Automated Market Ingestion Engine (Scrapling)</h3>
-                    <p style="color: #9CA3AF; font-size: 0.88rem; margin: 0; max-width: 700px;">
+                    <p style="color: #475569; font-size: 0.88rem; margin: 0; max-width: 700px;">
                         Deploys stealth TLS impersonation (JA3/JA4 browser fingerprints) to bypass Cloudflare Turnstile on AMFI India NAVs and NSE ETF quotes.
                     </p>
                 </div>
@@ -104,7 +104,7 @@ with tab_market:
                 <div class="vertex-card" style="padding: 16px;">
                     <div class="vertex-metric-label">Bronze Lake Payload</div>
                     <div class="vertex-metric-val">{bronze_count}</div>
-                    <div style="font-size: 0.75rem; color: #CD7F32; margin-top: 2px;">JSONB Raw Scrapes</div>
+                    <div style="font-size: 0.75rem; color: #B45309; font-weight: 500; margin-top: 2px;">JSONB Raw Scrapes</div>
                 </div>
             """, unsafe_allow_html=True)
 
@@ -113,7 +113,7 @@ with tab_market:
                 <div class="vertex-card" style="padding: 16px;">
                     <div class="vertex-metric-label">2025 Partition</div>
                     <div class="vertex-metric-val">{p25_rows:,}</div>
-                    <div style="font-size: 0.75rem; color: #9CA3AF; margin-top: 2px;">Historical Base Rows</div>
+                    <div style="font-size: 0.75rem; color: #64748B; margin-top: 2px;">Historical Base Rows</div>
                 </div>
             """, unsafe_allow_html=True)
 
@@ -121,8 +121,8 @@ with tab_market:
             st.markdown(f"""
                 <div class="vertex-card" style="padding: 16px;">
                     <div class="vertex-metric-label">2026 Partition</div>
-                    <div class="vertex-metric-val" style="color: #34D399;">{p26_rows:,}</div>
-                    <div style="font-size: 0.75rem; color: #34D399; margin-top: 2px;">Live Scraped Rows</div>
+                    <div class="vertex-metric-val" style="color: #15803D;">{p26_rows:,}</div>
+                    <div style="font-size: 0.75rem; color: #15803D; margin-top: 2px;">Live Scraped Rows</div>
                 </div>
             """, unsafe_allow_html=True)
 
@@ -131,7 +131,7 @@ with tab_market:
                 <div class="vertex-card" style="padding: 16px;">
                     <div class="vertex-metric-label">Anti-Bot Status</div>
                     <div style="margin: 6px 0 4px 0;"><span class="badge-chip badge-success">STEALTH TLS ACTIVE</span></div>
-                    <div style="font-size: 0.75rem; color: #9CA3AF;">HTTP/2 WAF Bypass</div>
+                    <div style="font-size: 0.75rem; color: #64748B;">HTTP/2 WAF Bypass</div>
                 </div>
             """, unsafe_allow_html=True)
 
@@ -201,7 +201,7 @@ with tab_transactions:
     st.markdown("""
         <div class="vertex-card" style="padding: 20px 24px; margin-bottom: 20px;">
             <h3 style="font-size: 1.2rem; margin-bottom: 4px;">Personal Financial Transactions Ingestion</h3>
-            <p style="color: #9CA3AF; font-size: 0.88rem; margin: 0;">
+            <p style="color: #475569; font-size: 0.88rem; margin: 0;">
                 Upload bank or credit card statements. Vertex stages raw rows in Bronze, deduplicates via SHA-256 digital fingerprints into Silver, and triggers PL/pgSQL fact updates into Gold.
             </p>
         </div>

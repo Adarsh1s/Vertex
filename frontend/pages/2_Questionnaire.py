@@ -18,7 +18,7 @@ st.markdown("""
         <h1 style="font-size: 2.2rem; margin-bottom: 4px;">
             <span class="vertex-gradient-text">Risk Tolerance</span> Questionnaire
         </h1>
-        <p style="color: #9CA3AF; font-size: 0.95rem; margin: 0;">
+        <p style="color: #475569; font-size: 0.95rem; margin: 0;">
             Answer these 7 psychometric risk questions to map your profile to an asset allocation model.
         </p>
     </div>
@@ -79,20 +79,23 @@ if submitted:
     with st.spinner("Classifying risk profile in PostgreSQL engine..."):
         res = submit_questionnaire(answers_idx)
         if res.status_code == 200:
-            data = res.json()
-            score = data.get('risk_score', 0)
-            profile_name = data.get('risk_profile_name', 'Moderate')
-            
-            st.markdown(f"""
-                <div class="vertex-card" style="text-align: center; padding: 28px; border-color: rgba(16, 185, 129, 0.4);">
-                    <div style="font-size: 0.82rem; color: #9CA3AF; text-transform: uppercase; font-weight: 600;">CALCULATED RISK SCORE</div>
-                    <div style="font-family: 'Outfit', sans-serif; font-size: 2.8rem; font-weight: 800; color: #34D399; margin: 4px 0;">{score} / 100</div>
-                    <div style="font-size: 1.1rem; font-weight: 700; color: #FFFFFF; margin-bottom: 12px;">Assigned Model: <span style="color: #818CF8;">{profile_name}</span></div>
-                    <p style="color: #9CA3AF; font-size: 0.9rem; max-width: 480px; margin: 0 auto;">Your risk score has been permanently linked to your profile in PostgreSQL. You can now generate your versioned investment portfolio.</p>
-                </div>
-            """, unsafe_allow_html=True)
-            
-            if st.button("🚀 Open Dashboard & Generate Portfolio →", type="primary", use_container_width=True):
-                st.switch_page("pages/3_Dashboard.py")
+            st.session_state["questionnaire_result"] = res.json()
+            st.rerun()
         else:
             st.error(f"Failed to submit questionnaire: {res.text}")
+
+if "questionnaire_result" in st.session_state:
+    data = st.session_state["questionnaire_result"]
+    score = data.get('risk_score', 0)
+    profile_name = data.get('risk_profile_name', 'Moderate')
+    
+    st.markdown(f"""
+        <div class="vertex-card" style="text-align: center; padding: 28px; border: 1px solid #BBF7D0; background: #F0FDF4; margin-top: 20px;">
+            <div style="font-size: 0.82rem; color: #15803D; text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em;">CALCULATED RISK SCORE</div>
+            <div style="font-family: 'Outfit', sans-serif; font-size: 2.8rem; font-weight: 800; color: #15803D; margin: 4px 0;">{score} / 100</div>
+            <div style="font-size: 1.15rem; font-weight: 700; color: #0F172A; margin-bottom: 8px;">Assigned Model: <span style="color: #2563EB;">{profile_name}</span></div>
+            <p style="color: #475569; font-size: 0.9rem; max-width: 480px; margin: 0 auto 16px auto;">Your risk score has been permanently linked to your profile in PostgreSQL. You can now generate your versioned investment portfolio.</p>
+        </div>
+    """, unsafe_allow_html=True)
+    
+    st.page_link("pages/3_Dashboard.py", label="🚀 Open Dashboard & Generate Portfolio →", icon="📊", use_container_width=True)

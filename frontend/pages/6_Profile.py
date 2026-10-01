@@ -18,7 +18,7 @@ st.markdown("""
         <h1 style="font-size: 2.2rem; margin-bottom: 4px;">
             <span class="vertex-gradient-text">Investor Profile</span> Overview
         </h1>
-        <p style="color: #9CA3AF; font-size: 0.95rem; margin: 0;">
+        <p style="color: #475569; font-size: 0.95rem; margin: 0;">
             Review your financial baseline, risk classification, and investment parameters.
         </p>
     </div>
@@ -65,12 +65,12 @@ if res.status_code == 200:
                 </div>
                 <div class="vertex-metric-box">
                     <div class="vertex-metric-label">Net Monthly Savings Capacity</div>
-                    <div class="vertex-metric-val" style="color: #34D399;">₹{savings:,.2f} ({savings_pct}%)</div>
+                    <div class="vertex-metric-val" style="color: #15803D;">₹{savings:,.2f} ({savings_pct}%)</div>
                 </div>
             """, unsafe_allow_html=True)
             
         st.markdown(f"""
-            <div style="margin-top: 12px; padding: 12px 16px; background: rgba(31, 41, 55, 0.4); border-radius: 8px; display: flex; justify-content: space-between; font-size: 0.9rem;">
+            <div style="margin-top: 12px; padding: 12px 16px; background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; display: flex; justify-content: space-between; font-size: 0.9rem; color: #1E293B;">
                 <span><strong>Horizon:</strong> {data.get('investment_horizon_years', 0)} Years</span>
                 <span><strong>Goal:</strong> {data.get('investment_goal', 'Wealth Creation')}</span>
             </div>
@@ -84,15 +84,15 @@ if res.status_code == 200:
                 <span class="badge-chip badge-success">{profile_name}</span>
             </div>
             <div style="display: flex; align-items: center; gap: 24px;">
-                <div style="text-align: center; background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 12px; padding: 16px 24px;">
-                    <div class="vertex-metric-label">RISK SCORE</div>
-                    <div style="font-family: 'Outfit', sans-serif; font-size: 2.2rem; font-weight: 800; color: #818CF8;">
-                        {score if score is not None else 'N/A'}<span style="font-size: 1rem; color: #9CA3AF;"> / 100</span>
+                <div style="text-align: center; background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 12px; padding: 16px 24px;">
+                    <div class="vertex-metric-label" style="color: #1D4ED8;">RISK SCORE</div>
+                    <div style="font-family: 'Outfit', sans-serif; font-size: 2.2rem; font-weight: 800; color: #1E40AF;">
+                        {score if score is not None else 'N/A'}<span style="font-size: 1rem; color: #64748B;"> / 100</span>
                     </div>
                 </div>
                 <div>
-                    <div style="font-weight: 600; color: #FFFFFF; font-size: 1.05rem;">Assigned Model: {profile_name}</div>
-                    <p style="color: #9CA3AF; font-size: 0.85rem; margin: 4px 0 0 0;">
+                    <div style="font-weight: 600; color: #0F172A; font-size: 1.05rem;">Assigned Model: {profile_name}</div>
+                    <p style="color: #64748B; font-size: 0.85rem; margin: 4px 0 0 0;">
                         Determines the baseline target percentage for Equity, Debt, Gold, and Cash asset classes.
                     </p>
                 </div>
@@ -102,12 +102,9 @@ if res.status_code == 200:
     
     col_a, col_b = st.columns(2)
     with col_a:
-        if st.button("✏️ Edit Financial Details", use_container_width=True):
-            st.switch_page("pages/1_Onboarding.py")
+        st.page_link("pages/1_Onboarding.py", label="Edit Financial Details", icon="✏️", use_container_width=True)
     with col_b:
-        if st.button("📝 Retake Risk Questionnaire", use_container_width=True, type="primary"):
-            st.switch_page("pages/2_Questionnaire.py")
+        st.page_link("pages/2_Questionnaire.py", label="Retake Risk Questionnaire", icon="📝", use_container_width=True)
 else:
     st.warning("Financial profile not completed yet.")
-    if st.button("Complete Onboarding Now →", type="primary"):
-        st.switch_page("pages/1_Onboarding.py")
+    st.page_link("pages/1_Onboarding.py", label="Complete Onboarding Now →", icon="📝")

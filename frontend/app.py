@@ -8,14 +8,14 @@ render_sidebar_brand()
 
 # Hero Header
 st.markdown("""
-    <div style="text-align: center; margin: 20px 0 35px 0;">
-        <div style="display: inline-block; padding: 6px 16px; background: rgba(99, 102, 241, 0.12); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 9999px; font-size: 0.8rem; font-weight: 600; color: #818CF8; margin-bottom: 12px; letter-spacing: 0.05em;">
+    <div style="text-align: center; margin: 20px 0 32px 0;">
+        <div style="display: inline-block; padding: 6px 16px; background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 9999px; font-size: 0.8rem; font-weight: 600; color: #1D4ED8; margin-bottom: 12px; letter-spacing: 0.05em;">
             🏛️ ADVANCED POSTGRESQL 16 LAKEHOUSE
         </div>
-        <h1 style="font-size: 3rem; margin-bottom: 8px; font-weight: 800; letter-spacing: -0.03em;">
+        <h1 style="font-size: 2.8rem; margin-bottom: 8px; font-weight: 800; letter-spacing: -0.03em;">
             <span class="vertex-gradient-text">VERTEX</span>
         </h1>
-        <p style="font-size: 1.1rem; color: var(--text-secondary); max-width: 540px; margin: 0 auto; line-height: 1.5;">
+        <p style="font-size: 1.05rem; color: #475569; max-width: 540px; margin: 0 auto; line-height: 1.5;">
             Autonomous Multi-Tier Financial Lakehouse & Real-Time Portfolio Intelligence Engine
         </p>
     </div>
@@ -27,12 +27,12 @@ if "token" in st.session_state:
     
     st.markdown(f"""
         <div class="vertex-card" style="text-align: center; padding: 32px 24px;">
-            <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #6366F1, #A855F7); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px auto; font-size: 1.8rem; box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);">
+            <div style="width: 56px; height: 56px; background: #2563EB; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px auto; font-size: 1.6rem; color: #FFFFFF; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);">
                 👤
             </div>
-            <h2 style="margin-bottom: 4px; font-size: 1.6rem; color: var(--text-primary);">Welcome back, {user_name}!</h2>
-            <div style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 24px;">{user_email}</div>
-            <div style="display: inline-block; padding: 4px 12px; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 9999px; color: #10B981; font-size: 0.8rem; font-weight: 600;">
+            <h2 style="margin-bottom: 4px; font-size: 1.5rem; color: #0F172A;">Welcome back, {user_name}!</h2>
+            <div style="color: #64748B; font-size: 0.9rem; margin-bottom: 20px;">{user_email}</div>
+            <div style="display: inline-block; padding: 4px 12px; background: #F0FDF4; border: 1px solid #BBF7D0; border-radius: 9999px; color: #15803D; font-size: 0.8rem; font-weight: 600;">
                 🟢 Session Authenticated (HS256 Bearer JWT)
             </div>
         </div>
@@ -40,11 +40,9 @@ if "token" in st.session_state:
     
     col1, col2, col3 = st.columns(3)
     with col1:
-        if st.button("📊 Open Dashboard", use_container_width=True, type="primary"):
-            st.switch_page("pages/3_Dashboard.py")
+        st.page_link("pages/3_Dashboard.py", label="Open Dashboard", icon="📊", use_container_width=True)
     with col2:
-        if st.button("🏛️ Data Hub", use_container_width=True):
-            st.switch_page("pages/7_Data_Hub.py")
+        st.page_link("pages/7_Data_Hub.py", label="Data Hub", icon="🏛️", use_container_width=True)
     with col3:
         if st.button("Sign Out", use_container_width=True):
             sign_out()
