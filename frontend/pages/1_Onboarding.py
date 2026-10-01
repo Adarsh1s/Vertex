@@ -33,10 +33,8 @@ if res.status_code == 200:
     profile_exists = True
     existing_data = res.json()
 
-st.markdown('<div class="vertex-card">', unsafe_allow_html=True)
-st.markdown("<h3 style='font-size: 1.25rem; margin-bottom: 16px;'>Cashflow & Investment Parameters</h3>", unsafe_allow_html=True)
-
 with st.form("onboarding_form"):
+    st.markdown("<h3 style='font-size: 1.25rem; margin-bottom: 16px;'>Cashflow & Investment Parameters</h3>", unsafe_allow_html=True)
     col1, col2 = st.columns(2)
     with col1:
         monthly_income = st.number_input(
@@ -76,8 +74,6 @@ with st.form("onboarding_form"):
     
     st.markdown("<div style='margin-top: 14px;'></div>", unsafe_allow_html=True)
     submit_btn = st.form_submit_button("💾 Save Financial Profile", type="primary", use_container_width=True)
-
-st.markdown('</div>', unsafe_allow_html=True)
 
 if submit_btn:
     payload = {

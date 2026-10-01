@@ -168,6 +168,17 @@ def apply_page_style():
             background-color: rgba(99, 102, 241, 0.08) !important;
         }
 
+        /* Glassmorphic Form & Bordered Container Upgrades */
+        [data-testid="stForm"], div[data-testid="stVerticalBlockBorderWrapper"] > div {
+            background: rgba(17, 24, 39, 0.75) !important;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08) !important;
+            border-radius: 16px !important;
+            padding: 24px !important;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
         /* Sidebar Styling */
         section[data-testid="stSidebar"] {
             background-color: #0B0F19 !important;
@@ -194,26 +205,6 @@ def apply_page_style():
 
 
 def render_sidebar_brand():
-    """Renders persistent brand header in Streamlit sidebar."""
-    with st.sidebar:
-        st.markdown("""
-            <div style="padding: 10px 0 16px 0; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 16px;">
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <div style="background: linear-gradient(135deg, #4F46E5, #9333EA); width: 34px; height: 34px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);">
-                        🔷
-                    </div>
-                    <div>
-                        <div style="font-family: 'Outfit', sans-serif; font-size: 1.25rem; font-weight: 800; letter-spacing: -0.03em; color: #FFFFFF;">
-                            VERTEX
-                        </div>
-                        <div style="font-size: 0.7rem; color: #9CA3AF; font-weight: 500; letter-spacing: 0.04em;">
-                            FINANCIAL LAKEHOUSE
-                        </div>
-                    </div>
-                </div>
-                <div style="margin-top: 12px; display: flex; align-items: center; gap: 6px;">
-                    <span style="height: 7px; width: 7px; background-color: #10B981; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px #10B981;"></span>
-                    <span style="font-size: 0.72rem; color: #D1D5DB; font-weight: 500;">PostgreSQL 16 Lakehouse Active</span>
-                </div>
-            </div>
-        """, unsafe_allow_html=True)
+    """Clean sidebar without persistent lakehouse widget (removed per user preference)."""
+    pass
+

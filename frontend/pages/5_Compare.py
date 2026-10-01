@@ -31,17 +31,16 @@ if res_profiles.status_code == 200:
     profiles = res_profiles.json()
     p_names = [p['profile_name'] for p in profiles]
     
-    st.markdown('<div class="vertex-card" style="padding: 20px 24px; margin-bottom: 24px;">', unsafe_allow_html=True)
-    st.markdown("<h3 style='font-size: 1.15rem; margin-bottom: 14px;'>Select Models to Compare</h3>", unsafe_allow_html=True)
-    col1, col2 = st.columns(2)
-    with col1:
-        model_1 = st.selectbox("Baseline Model", options=p_names, index=0)
-    with col2:
-        model_2 = st.selectbox("Alternative Comparison Model", options=p_names, index=min(2, len(p_names)-1))
-        
-    st.markdown("<div style='margin-top: 10px;'></div>", unsafe_allow_html=True)
-    compare_clicked = st.button("⚖️ Compare Allocations", type="primary", use_container_width=True)
-    st.markdown('</div>', unsafe_allow_html=True)
+    with st.container(border=True):
+        st.markdown("<h3 style='font-size: 1.15rem; margin-bottom: 14px;'>Select Models to Compare</h3>", unsafe_allow_html=True)
+        col1, col2 = st.columns(2)
+        with col1:
+            model_1 = st.selectbox("Baseline Model", options=p_names, index=0)
+        with col2:
+            model_2 = st.selectbox("Alternative Comparison Model", options=p_names, index=min(2, len(p_names)-1))
+            
+        st.markdown("<div style='margin-top: 10px;'></div>", unsafe_allow_html=True)
+        compare_clicked = st.button("⚖️ Compare Allocations", type="primary", use_container_width=True)
         
     if compare_clicked or True: # Run on load or click
         with st.spinner("Fetching model templates from database..."):
@@ -55,20 +54,18 @@ if res_profiles.status_code == 200:
                 
                 col_chart, col_tbl = st.columns([3, 2])
                 with col_chart:
-                    st.markdown('<div class="vertex-card">', unsafe_allow_html=True)
-                    st.markdown("<h3 style='font-size: 1.15rem; margin-bottom: 12px;'>Stacked Asset Class Weight (%)</h3>", unsafe_allow_html=True)
-                    fig = draw_comparison_bar(combined)
-                    st.plotly_chart(fig, use_container_width=True)
-                    st.markdown('</div>', unsafe_allow_html=True)
+                    with st.container(border=True):
+                        st.markdown("<h3 style='font-size: 1.15rem; margin-bottom: 12px;'>Stacked Asset Class Weight (%)</h3>", unsafe_allow_html=True)
+                        fig = draw_comparison_bar(combined)
+                        st.plotly_chart(fig, use_container_width=True)
                     
                 with col_tbl:
-                    st.markdown('<div class="vertex-card">', unsafe_allow_html=True)
-                    st.markdown("<h3 style='font-size: 1.15rem; margin-bottom: 12px;'>Side-by-Side Breakdown</h3>", unsafe_allow_html=True)
-                    df = pd.DataFrame(combined)
-                    if not df.empty:
-                        df_pivot = df.pivot_table(index="asset_class", columns="model_name", values="allocation_percentage", aggfunc="sum").fillna(0)
-                        st.dataframe(df_pivot.style.format("{:.1f}%"), use_container_width=True)
-                    st.markdown('</div>', unsafe_allow_html=True)
+                    with st.container(border=True):
+                        st.markdown("<h3 style='font-size: 1.15rem; margin-bottom: 12px;'>Side-by-Side Breakdown</h3>", unsafe_allow_html=True)
+                        df = pd.DataFrame(combined)
+                        if not df.empty:
+                            df_pivot = df.pivot_table(index="asset_class", columns="model_name", values="allocation_percentage", aggfunc="sum").fillna(0)
+                            st.dataframe(df_pivot.style.format("{:.1f}%"), use_container_width=True)
             else:
                 st.error("Failed to load comparison data.")
 else:

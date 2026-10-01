@@ -37,45 +37,44 @@ if res.status_code == 200:
     profile_name = data.get('risk_profile_name', 'Not Assessed')
     
     # Financial Baseline Card
-    st.markdown("""
-        <div class="vertex-card" style="padding: 24px; margin-bottom: 18px;">
+    with st.container(border=True):
+        st.markdown("""
             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
                 <h3 style="font-size: 1.2rem; margin: 0;">Financial Parameters</h3>
                 <span class="badge-chip badge-info">app_users & user_profiles</span>
             </div>
-    """, unsafe_allow_html=True)
-    
-    col1, col2 = st.columns(2)
-    with col1:
-        st.markdown(f"""
-            <div class="vertex-metric-box">
-                <div class="vertex-metric-label">Monthly Gross Income</div>
-                <div class="vertex-metric-val">₹{income:,.2f}</div>
-            </div>
-            <div class="vertex-metric-box">
-                <div class="vertex-metric-label">Allocated Investment Capital</div>
-                <div class="vertex-metric-val">₹{data.get('investment_amount', 0):,.2f}</div>
-            </div>
-        """, unsafe_allow_html=True)
-    with col2:
-        st.markdown(f"""
-            <div class="vertex-metric-box">
-                <div class="vertex-metric-label">Monthly Living Expenses</div>
-                <div class="vertex-metric-val">₹{expenses:,.2f}</div>
-            </div>
-            <div class="vertex-metric-box">
-                <div class="vertex-metric-label">Net Monthly Savings Capacity</div>
-                <div class="vertex-metric-val" style="color: #34D399;">₹{savings:,.2f} ({savings_pct}%)</div>
-            </div>
         """, unsafe_allow_html=True)
         
-    st.markdown(f"""
-        <div style="margin-top: 12px; padding: 12px 16px; background: rgba(31, 41, 55, 0.4); border-radius: 8px; display: flex; justify-content: space-between; font-size: 0.9rem;">
-            <span><strong>Horizon:</strong> {data.get('investment_horizon_years', 0)} Years</span>
-            <span><strong>Goal:</strong> {data.get('investment_goal', 'Wealth Creation')}</span>
-        </div>
-        </div>
-    """, unsafe_allow_html=True)
+        col1, col2 = st.columns(2)
+        with col1:
+            st.markdown(f"""
+                <div class="vertex-metric-box">
+                    <div class="vertex-metric-label">Monthly Gross Income</div>
+                    <div class="vertex-metric-val">₹{income:,.2f}</div>
+                </div>
+                <div class="vertex-metric-box">
+                    <div class="vertex-metric-label">Allocated Investment Capital</div>
+                    <div class="vertex-metric-val">₹{data.get('investment_amount', 0):,.2f}</div>
+                </div>
+            """, unsafe_allow_html=True)
+        with col2:
+            st.markdown(f"""
+                <div class="vertex-metric-box">
+                    <div class="vertex-metric-label">Monthly Living Expenses</div>
+                    <div class="vertex-metric-val">₹{expenses:,.2f}</div>
+                </div>
+                <div class="vertex-metric-box">
+                    <div class="vertex-metric-label">Net Monthly Savings Capacity</div>
+                    <div class="vertex-metric-val" style="color: #34D399;">₹{savings:,.2f} ({savings_pct}%)</div>
+                </div>
+            """, unsafe_allow_html=True)
+            
+        st.markdown(f"""
+            <div style="margin-top: 12px; padding: 12px 16px; background: rgba(31, 41, 55, 0.4); border-radius: 8px; display: flex; justify-content: space-between; font-size: 0.9rem;">
+                <span><strong>Horizon:</strong> {data.get('investment_horizon_years', 0)} Years</span>
+                <span><strong>Goal:</strong> {data.get('investment_goal', 'Wealth Creation')}</span>
+            </div>
+        """, unsafe_allow_html=True)
     
     # Risk Assessment Card
     st.markdown(f"""

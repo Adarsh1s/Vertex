@@ -75,8 +75,7 @@ else:
     tab_signin, tab_signup = st.tabs(["🔐 Sign In", "✨ Create Account"])
 
     with tab_signin:
-        with st.container():
-            st.markdown('<div class="vertex-card">', unsafe_allow_html=True)
+        with st.container(border=True):
             st.markdown("<h3 style='margin-bottom: 16px; font-size: 1.25rem;'>Account Sign In</h3>", unsafe_allow_html=True)
             
             email = st.text_input("Email Address", key="si_email", placeholder="you@example.com")
@@ -96,11 +95,9 @@ else:
                         st.error(f"Login failed: {result['error']}")
                     else:
                         st.error("Invalid credentials")
-            st.markdown('</div>', unsafe_allow_html=True)
 
     with tab_signup:
-        with st.container():
-            st.markdown('<div class="vertex-card">', unsafe_allow_html=True)
+        with st.container(border=True):
             st.markdown("<h3 style='margin-bottom: 16px; font-size: 1.25rem;'>Create a New Account</h3>", unsafe_allow_html=True)
             
             su_name = st.text_input("Full Name", placeholder="e.g. Adarsh Singh")
@@ -123,4 +120,3 @@ else:
                         st.error(f"Registration failed: {result['error']}")
                     else:
                         st.error("Registration failed. Please try again.")
-            st.markdown('</div>', unsafe_allow_html=True)

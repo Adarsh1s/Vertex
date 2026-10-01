@@ -65,13 +65,10 @@ questions = [
 with st.form("questionnaire_form"):
     answers = []
     for idx, q_data in enumerate(questions):
-        st.markdown(f"""
-            <div class="vertex-card" style="padding: 18px 22px; margin-bottom: 14px;">
-                <div style="font-size: 1.05rem; font-weight: 700; color: #FFFFFF; margin-bottom: 8px;">{q_data["q"]}</div>
-        """, unsafe_allow_html=True)
-        ans = st.radio(f"Select option for question {idx+1}", options=q_data["opts"], key=f"q_{idx}", label_visibility="collapsed")
-        answers.append((ans, q_data))
-        st.markdown('</div>', unsafe_allow_html=True)
+        with st.container(border=True):
+            st.markdown(f"<div style='font-size: 1.05rem; font-weight: 700; color: #FFFFFF; margin-bottom: 8px;'>{q_data['q']}</div>", unsafe_allow_html=True)
+            ans = st.radio(f"Select option for question {idx+1}", options=q_data["opts"], key=f"q_{idx}", label_visibility="collapsed")
+            answers.append((ans, q_data))
         
     st.markdown("<div style='margin-top: 14px;'></div>", unsafe_allow_html=True)
     submitted = st.form_submit_button("⚡ Submit Answers & Calculate Model", type="primary", use_container_width=True)
