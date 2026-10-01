@@ -74,8 +74,8 @@ with tab_market:
         </div>
     """, unsafe_allow_html=True)
 
-    col_btn, col_blank = st.columns([1, 2])
-    with col_btn:
+    c_btn, _ = st.columns([1, 2])
+    with c_btn:
         if st.button("🚀 Trigger Live Crawl & Ingest", type="primary", use_container_width=True):
             with st.spinner("Scrapling is bypassing anti-bot checks and ingesting feeds..."):
                 res = trigger_market_crawl()

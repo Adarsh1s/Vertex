@@ -186,12 +186,12 @@ with c2:
             for i, r in enumerate(returns_data):
                 with m_cols[i]:
                     st.markdown(f"""
-                        <div class="vertex-metric-box" style="text-align: center; padding: 18px 10px; margin-top: 14px;">
-                            <div style="font-size: 0.8rem; color: #64748B; font-weight: 600; text-transform: uppercase;">{r['period']} Horizon</div>
-                            <div style="font-family: 'Outfit', sans-serif; font-size: 1.6rem; font-weight: 700; color: #15803D; margin-top: 4px;">
+                        <div class="vertex-metric-box" style="text-align: center; padding: 14px 6px; margin-top: 14px; min-width: 0; overflow: hidden;">
+                            <div style="font-size: 0.75rem; color: #64748B; font-weight: 600; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{r['period']} Horizon</div>
+                            <div style="font-family: 'Outfit', sans-serif; font-size: 1.25rem; font-weight: 700; color: #15803D; margin-top: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                                 +{r['blended_return']:.2f}%
                             </div>
-                            <div style="font-size: 0.72rem; color: #94A3B8; margin-top: 2px;">Compounded Proj.</div>
+                            <div style="font-size: 0.70rem; color: #94A3B8; margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Compounded Proj.</div>
                         </div>
                     """, unsafe_allow_html=True)
 

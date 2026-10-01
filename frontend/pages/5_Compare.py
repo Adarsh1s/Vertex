@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 from utils.auth import require_auth
 from utils.api import compare_portfolio, get_risk_profiles
-from utils.charts import draw_comparison_bar
+from utils.charts import draw_comparison_bar, draw_grouped_comparison_bar
 from utils.ui import apply_page_style, render_sidebar_brand
 
 st.set_page_config(page_title="Compare Models — Vertex", page_icon="⚖️", layout="wide")
@@ -52,19 +52,35 @@ if res_profiles.status_code == 200:
                 data2 = res2.json()
                 combined = data1 + data2
                 
-                col_chart, col_tbl = st.columns([3, 2])
-                with col_chart:
+                # Balanced dual-chart comparison
+                col_c1, col_c2 = st.columns([1, 1])
+                with col_c1:
                     with st.container(border=True):
                         st.markdown("<h3 style='font-size: 1.15rem; margin-bottom: 12px;'>Stacked Asset Class Weight (%)</h3>", unsafe_allow_html=True)
-                        fig = draw_comparison_bar(combined)
-                        st.plotly_chart(fig, use_container_width=True)
+                        fig_stacked = draw_comparison_bar(combined)
+                        st.plotly_chart(fig_stacked, use_container_width=True)
                     
-                with col_tbl:
+                with col_c2:
                     with st.container(border=True):
                         st.markdown("<h3 style='font-size: 1.15rem; margin-bottom: 12px;'>Side-by-Side Breakdown</h3>", unsafe_allow_html=True)
-                        df = pd.DataFrame(combined)
-                        if not df.empty:
-                            df_pivot = df.pivot_table(index="asset_class", columns="model_name", values="allocation_percentage", aggfunc="sum").fillna(0)
+                        fig_grouped = draw_grouped_comparison_bar(combined)
+                        st.plotly_chart(fig_grouped, use_container_width=True)
+
+                # Allocation Variance Matrix
+                with st.container(border=True):
+                    st.markdown("<h3 style='font-size: 1.15rem; margin-bottom: 8px;'>Allocation Variance & Shift Matrix</h3>", unsafe_allow_html=True)
+                    df = pd.DataFrame(combined)
+                    if not df.empty:
+                        df_pivot = df.pivot_table(index="asset_class", columns="model_name", values="allocation_percentage", aggfunc="sum").fillna(0)
+                        if model_1 in df_pivot.columns and model_2 in df_pivot.columns:
+                            df_pivot["Allocation Shift (pts)"] = df_pivot[model_2] - df_pivot[model_1]
+                            format_dict = {
+                                model_1: "{:.1f}%",
+                                model_2: "{:.1f}%",
+                                "Allocation Shift (pts)": "{:+.1f}%"
+                            }
+                            st.dataframe(df_pivot.style.format(format_dict), use_container_width=True)
+                        else:
                             st.dataframe(df_pivot.style.format("{:.1f}%"), use_container_width=True)
             else:
                 st.error("Failed to load comparison data.")

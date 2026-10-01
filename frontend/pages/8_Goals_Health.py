@@ -65,18 +65,18 @@ if health_res.status_code == 200:
 col_new, col_sim = st.columns([1, 1])
 
 with col_new:
-    st.markdown("<h3 style='font-size: 1.25rem; margin-bottom: 16px;'>Create Financial Goal</h3>", unsafe_allow_html=True)
     with st.form("new_goal_form"):
+        st.markdown("<h3 style='font-size: 1.25rem; margin-bottom: 12px;'>Create Financial Goal</h3>", unsafe_allow_html=True)
         name = st.text_input("Goal Purpose", placeholder="e.g. Retirement Fund, Home Down Payment")
         c1, c2 = st.columns(2)
         with c1:
-            target = st.number_input("Target Amount (₹)", min_value=1_000.0, value=1_000_000.0, step=25_000.0)
-            rate = st.number_input("Expected Annual Return (%)", min_value=1.0, max_value=30.0, value=10.0, step=0.5)
+            target = st.number_input("Target Amount (₹)", min_value=1_000.0, value=1_000_000.0, step=25_000.0, format="%.0f")
+            rate = st.number_input("Expected Return (%)", min_value=1.0, max_value=30.0, value=10.0, step=0.5, format="%.1f")
         with c2:
-            current = st.number_input("Already Saved (₹)", min_value=0.0, value=50_000.0, step=10_000.0)
-            target_date = st.date_input("Target Milestone Date", value=dt.date.today() + dt.timedelta(days=365 * 5), min_value=dt.date.today() + dt.timedelta(days=30))
+            current = st.number_input("Already Saved (₹)", min_value=0.0, value=50_000.0, step=10_000.0, format="%.0f")
+            target_date = st.date_input("Milestone Target Date", value=dt.date.today() + dt.timedelta(days=365 * 5), min_value=dt.date.today() + dt.timedelta(days=30))
         
-        st.markdown("<div style='margin-top: 12px;'></div>", unsafe_allow_html=True)
+        st.markdown("<div style='margin-top: 14px;'></div>", unsafe_allow_html=True)
         submitted = st.form_submit_button("⚡ Add Goal Milestone", type="primary", use_container_width=True)
         
     if submitted:

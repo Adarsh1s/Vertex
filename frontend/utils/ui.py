@@ -117,13 +117,22 @@ def apply_page_style():
         }
 
         /* Inputs & Form Controls */
-        .stTextInput input, .stNumberInput input, .stSelectbox select, .stDateInput input {
+        .stTextInput input, .stSelectbox select, .stDateInput input {
             background-color: #FFFFFF !important;
             border: 1px solid #CBD5E1 !important;
             border-radius: 8px !important;
             color: #0F172A !important;
             padding: 10px 14px !important;
             box-sizing: border-box !important;
+        }
+        .stNumberInput input {
+            background-color: #FFFFFF !important;
+            border: 1px solid #CBD5E1 !important;
+            border-radius: 8px !important;
+            color: #0F172A !important;
+            padding: 8px 10px !important;
+            box-sizing: border-box !important;
+            font-size: 0.95rem !important;
         }
         .stTextInput input:focus, .stNumberInput input:focus {
             border-color: #2563EB !important;
@@ -183,7 +192,17 @@ def apply_page_style():
             color: #0F172A !important;
         }
 
-        /* Form Card */
+        /* Neutralize all columns so they act purely as transparent layout grids */
+        [data-testid="column"],
+        [data-testid="column"] > div,
+        [data-testid="column"] div[data-testid="stVerticalBlockBorderWrapper"] {
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+            padding: 0 !important;
+        }
+
+        /* Forms should have a single outer card border without internal child borders */
         [data-testid="stForm"] {
             background: #FFFFFF !important;
             border: 1px solid #E2E8F0 !important;
@@ -191,16 +210,8 @@ def apply_page_style():
             padding: 24px !important;
             box-shadow: var(--card-shadow) !important;
         }
-
-        /* Main Content Containers - Clean Single Border */
-        .main div[data-testid="stVerticalBlockBorderWrapper"] {
-            background: #FFFFFF !important;
-            border: 1px solid #E2E8F0 !important;
-            border-radius: 12px !important;
-            padding: 20px !important;
-            box-shadow: var(--card-shadow) !important;
-        }
-        .main div[data-testid="stVerticalBlockBorderWrapper"] > div {
+        [data-testid="stForm"] [data-testid="column"] > div,
+        [data-testid="stForm"] div[data-testid="stVerticalBlockBorderWrapper"] {
             background: transparent !important;
             border: none !important;
             box-shadow: none !important;
