@@ -20,7 +20,7 @@
 --             • Query 8:  Portfolio Drift & Rebalance Check (Simple Comparison)
 --             • Query 9:  Financial Transactions Ledger & Monthly Spending Facts
 --             • Query 10: Financial Goals Tracker & SIP Milestone Progress
---             • Query 11: Automated Audit Trail Verification (Trigger Fired Proof)
+--             • Query 11: PL/pgSQL Trigger Engine (Audit Trigger DDL + Fire Test + Verification)
 -- [PART 2]    ADVANCED ADBMS & VIVA EXAMINATION PROOFS
 --             • Query 12: Declarative Range Partition Pruning Proof (Silver Tier)
 --             • Query 13: Semi-Structured JSONB Querying with GIN Index (Bronze Tier)
@@ -454,24 +454,111 @@ FROM financial_goals
 ORDER BY target_date ASC;
 
 
+-- ============================================================================
+-- QUERY 11: PL/pgSQL DATABASE TRIGGER ENGINE (AUDIT LOGGING ON PORTFOLIO GENERATION)
+-- Concept: Demonstrates database-level event triggers in PL/pgSQL. When any
+--          new row is inserted into 'user_portfolios', the trigger automatically
+--          executes 'fn_audit_portfolio_generation()' and appends an immutable
+--          JSONB audit trail entry into 'audit_log'.
+--
+-- 💡 RUNNING INDIVIDUALLY IN DBEAVER:
+--    You can highlight and run each step independently with Ctrl+Enter:
+--      • Step 11A: Create / Replace Trigger Function (DDL)
+--      • Step 11B: Create / Rebind Trigger on 'user_portfolios' (DDL)
+--      • Step 11C: Fire Trigger Individually (Test INSERT)
+--      • Step 11D: Verify Trigger Fired in 'audit_log'
+--      • Step 11E: Clean up test row (Optional)
+-- ============================================================================
+
 -- ----------------------------------------------------------------------------
--- QUERY 11: Automated Audit Trail Verification (Trigger Fired Proof)
--- Concept: Verifies that database trigger 'trg_audit_portfolio' automatically
---          logged an immutable audit record when a portfolio was created.
+-- STEP 11A: Create / Replace the PL/pgSQL Trigger Function
+-- ----------------------------------------------------------------------------
+CREATE OR REPLACE FUNCTION fn_audit_portfolio_generation()
+RETURNS TRIGGER 
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    INSERT INTO audit_log (user_id, action, metadata)
+    VALUES (
+        NEW.user_id,
+        'PORTFOLIO_GENERATED',
+        jsonb_build_object(
+            'portfolio_id',     NEW.portfolio_id,
+            'model_id',         NEW.model_id,
+            'version',          NEW.version,
+            'total_investment', NEW.total_investment,
+            'fired_by_trigger', 'trg_audit_portfolio',
+            'db_user',          current_user,
+            'server_timestamp', clock_timestamp()
+        )
+    );
+    RETURN NEW;
+END;
+$$;
+
+
+-- ----------------------------------------------------------------------------
+-- STEP 11B: Create / Rebind the Trigger on 'user_portfolios' Table
+-- ----------------------------------------------------------------------------
+DROP TRIGGER IF EXISTS trg_audit_portfolio ON user_portfolios;
+
+CREATE TRIGGER trg_audit_portfolio
+AFTER INSERT ON user_portfolios
+FOR EACH ROW 
+EXECUTE FUNCTION fn_audit_portfolio_generation();
+
+
+-- ----------------------------------------------------------------------------
+-- STEP 11C: Fire the Trigger Individually (Live Demonstration)
+-- Concept: Inserts a test portfolio row to demonstrate the trigger firing live.
+--          Notice: We NEVER insert into 'audit_log' directly — the trigger does!
+-- ----------------------------------------------------------------------------
+INSERT INTO user_portfolios (
+    user_id,
+    model_id,
+    total_investment,
+    is_active,
+    version
+)
+SELECT 
+    user_id,
+    3,              -- Growth Model (model_id = 3)
+    100000.00,      -- 1,00,000 INR
+    FALSE,          -- Keep inactive so it doesn't displace active portfolio
+    99              -- Test version tag for easy identification and cleanup
+FROM app_users
+LIMIT 1
+RETURNING portfolio_id, user_id, model_id, total_investment, version, generated_at;
+
+
+-- ----------------------------------------------------------------------------
+-- STEP 11D: Verify Trigger Execution in 'audit_log' Table
+-- Concept: Proves that 'trg_audit_portfolio' instantly and automatically captured
+--          the event into the immutable audit trail.
 -- ----------------------------------------------------------------------------
 SELECT 
     log_id,
     user_id,
     action,
-    metadata->>'portfolio_id'    AS portfolio_id,
-    metadata->>'model_id'        AS model_id,
-    metadata->>'version'         AS portfolio_version,
-    metadata->>'total_investment' AS investment_amount,
-    created_at                   AS trigger_logged_at
+    metadata->>'portfolio_id'      AS portfolio_id,
+    metadata->>'model_id'          AS model_id,
+    metadata->>'version'           AS portfolio_version,
+    metadata->>'total_investment'   AS investment_amount,
+    metadata->>'fired_by_trigger'  AS fired_by_trigger,
+    metadata->>'db_user'           AS executed_by_db_user,
+    created_at                     AS trigger_logged_at
 FROM audit_log
 WHERE action = 'PORTFOLIO_GENERATED'
 ORDER BY created_at DESC
 LIMIT 5;
+
+
+-- ----------------------------------------------------------------------------
+-- STEP 11E (Optional Cleanup): Remove the test portfolio version
+-- ----------------------------------------------------------------------------
+DELETE FROM user_portfolios 
+WHERE version = 99 
+  AND is_active = FALSE;
 
 
 
