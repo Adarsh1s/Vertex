@@ -23,7 +23,6 @@ st.markdown("""
     <div style="margin-bottom: 24px;">
         <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
             <span class="badge-chip badge-info">REAL-TIME PORTFOLIO TELEMETRY</span>
-            <span class="badge-chip badge-success">🟢 ENGINE SYNC ACTIVE</span>
         </div>
         <h1 style="font-size: 2.2rem; margin-bottom: 4px;">
             <span class="vertex-gradient-text">Portfolio Intelligence</span> & Live Valuation
@@ -56,7 +55,7 @@ with col_prof:
         <div class="vertex-metric-box" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 20px;">
             <div>
                 <span style="font-size: 0.8rem; color: #64748B; font-weight: 600;">ACTIVE RISK PROFILE: </span>
-                <strong style="color: #1E40AF; font-family: 'Outfit', sans-serif; font-size: 1.05rem;">{risk_profile_name}</strong>
+                <strong style="color: #047857; font-family: 'Outfit', sans-serif; font-size: 1.05rem;">{risk_profile_name}</strong>
             </div>
             <div>
                 <span style="font-size: 0.8rem; color: #64748B; font-weight: 600;">SCORE: </span>
@@ -124,7 +123,7 @@ if drift_res.status_code == 200 and drift_res.json().get("has_portfolio"):
             <div class="vertex-card" style="padding: 18px 20px;">
                 <div class="vertex-metric-label">Active Model</div>
                 <div class="vertex-metric-val" style="font-size: 1.35rem;">{portfolio_data['model_name']}</div>
-                <div style="font-size: 0.78rem; color: #2563EB; font-weight: 500; margin-top: 4px;">Version {portfolio_data['version']} (ACID)</div>
+                <div style="font-size: 0.78rem; color: #059669; font-weight: 500; margin-top: 4px;">Version {portfolio_data['version']} (ACID)</div>
             </div>
         """, unsafe_allow_html=True)
 

@@ -2,16 +2,13 @@ import streamlit as st
 from utils.auth import sign_in, sign_up, sign_out
 from utils.ui import apply_page_style, render_sidebar_brand
 
-st.set_page_config(page_title="Vertex — Financial Lakehouse", page_icon="🔷", layout="centered")
+st.set_page_config(page_title="Vertex — Financial Lakehouse", page_icon="📈", layout="centered")
 apply_page_style()
 render_sidebar_brand()
 
 # Hero Header
 st.markdown("""
     <div style="text-align: center; margin: 20px 0 32px 0;">
-        <div style="display: inline-block; padding: 6px 16px; background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 9999px; font-size: 0.8rem; font-weight: 600; color: #1D4ED8; margin-bottom: 12px; letter-spacing: 0.05em;">
-            🏛️ ADVANCED POSTGRESQL 16 LAKEHOUSE
-        </div>
         <h1 style="font-size: 2.8rem; margin-bottom: 8px; font-weight: 800; letter-spacing: -0.03em;">
             <span class="vertex-gradient-text">VERTEX</span>
         </h1>
@@ -27,7 +24,7 @@ if "token" in st.session_state:
     
     st.markdown(f"""
         <div class="vertex-card" style="text-align: center; padding: 32px 24px;">
-            <div style="width: 56px; height: 56px; background: #2563EB; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px auto; font-size: 1.6rem; color: #FFFFFF; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);">
+            <div style="width: 56px; height: 56px; background: #059669; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px auto; font-size: 1.6rem; color: #FFFFFF; box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);">
                 👤
             </div>
             <h2 style="margin-bottom: 4px; font-size: 1.5rem; color: #0F172A;">Welcome back, {user_name}!</h2>

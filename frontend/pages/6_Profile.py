@@ -84,9 +84,9 @@ if res.status_code == 200:
                 <span class="badge-chip badge-success">{profile_name}</span>
             </div>
             <div style="display: flex; align-items: center; gap: 24px;">
-                <div style="text-align: center; background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 12px; padding: 16px 24px;">
-                    <div class="vertex-metric-label" style="color: #1D4ED8;">RISK SCORE</div>
-                    <div style="font-family: 'Outfit', sans-serif; font-size: 2.2rem; font-weight: 800; color: #1E40AF;">
+                <div style="text-align: center; background: #F0FDF4; border: 1px solid #BBF7D0; border-radius: 12px; padding: 16px 24px;">
+                    <div class="vertex-metric-label" style="color: #15803D;">RISK SCORE</div>
+                    <div style="font-family: 'Outfit', sans-serif; font-size: 2.2rem; font-weight: 800; color: #047857;">
                         {score if score is not None else 'N/A'}<span style="font-size: 1rem; color: #64748B;"> / 100</span>
                     </div>
                 </div>

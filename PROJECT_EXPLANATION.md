@@ -242,13 +242,13 @@ erDiagram
 * **What it is:** For chronological time-series dates in `market_price_history`, a standard B-Tree index takes too much RAM.
 * **Why it matters:** A **BRIN index** only records the minimum and maximum date for groups of physical disk pages. It uses less than **1% of the storage** of a B-Tree while keeping date searches lightning fast.
 
-### 4. Database-Native ETL Stored Procedures
-* **What it is:** `sp_refresh_monthly_spending_facts(user_id)`.
-* **Why it matters:** Instead of sending thousands of rows over the network to Python, calculating totals in Python, and sending them back, PostgreSQL calculates the monthly spending facts directly inside the database engine in one atomic step.
+### 4. Database-Native Stored Procedures & Generation Engine
+* **What it is:** `sp_generate_portfolio(user_id, investment_amount)` and `sp_refresh_monthly_spending_facts(user_id)`.
+* **Why it matters:** Instead of sending multiple API calls back and forth over the network to Python, calculating allocations and inserting positions one by one, PostgreSQL generates and validates the entire robo-advisory portfolio atomically inside the database engine in a single ACID transaction.
 
 ### 5. Automated Triggers & Audit Logging
 * `trg_sync_spending_facts`: Whenever a new transaction is uploaded, a database trigger automatically calls the spending facts procedure.
-* `trg_audit_portfolio`: Whenever an investment portfolio is generated, an audit record with timestamp and version is permanently written to `audit_log`.
+* `trg_audit_portfolio`: Whenever an investment portfolio is generated, an audit record with timestamp, version, and investment amount is permanently written to `audit_log`.
 
 ---
 

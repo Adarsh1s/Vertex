@@ -1,15 +1,101 @@
 -- ============================================================================
 -- 🏛️ FinPulse Advanced DBMS: PL/pgSQL Stored Procedures, Functions & Triggers
 -- Demonstrates:
--- 1. Stored Procedure: Warehouse ETL aggregation (sp_refresh_monthly_spending_facts)
--- 2. Stored Function: Database-level Financial Health Score (fn_calculate_health_score)
--- 3. Stored Function: Portfolio Drift & Rebalancing Analyzer (fn_detect_portfolio_drift)
--- 4. Database Trigger: Real-time Fact Table Synchronization (trg_sync_spending_facts)
--- 5. Database Trigger: Data Lake Audit Logging (trg_audit_market_scrapes)
+-- 1. Stored Procedure: Automated Portfolio Generation (sp_generate_portfolio)
+-- 2. Stored Procedure: Warehouse ETL aggregation (sp_refresh_monthly_spending_facts)
+-- 3. Stored Function: Database-level Financial Health Score (fn_calculate_health_score)
+-- 4. Stored Function: Portfolio Drift & Rebalancing Analyzer (fn_detect_portfolio_drift)
+-- 5. Database Trigger: Real-time Fact Table Synchronization (trg_sync_spending_facts)
+-- 6. Database Trigger: Data Lake Audit Logging (trg_audit_market_scrapes)
 -- ============================================================================
 
 -- ----------------------------------------------------------------------------
--- 1. STORED PROCEDURE: Warehouse ETL Refresh for Star Schema
+-- 1. STORED PROCEDURE: Automated Robo-Advisory Portfolio Generation Engine
+-- ----------------------------------------------------------------------------
+CREATE OR REPLACE PROCEDURE sp_generate_portfolio(
+    p_user_id TEXT,
+    p_investment_amount NUMERIC DEFAULT NULL
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    v_model_id INT;
+    v_investment NUMERIC(14,2);
+    v_portfolio_id INT;
+    v_version INT;
+BEGIN
+    -- 1. Determine investment amount and model from user profile if not provided
+    SELECT 
+        COALESCE(p_investment_amount, up.investment_amount, 250000.00),
+        pm.model_id
+    INTO v_investment, v_model_id
+    FROM user_profiles up
+    JOIN portfolio_models pm ON up.risk_profile_id = pm.risk_profile_id
+    WHERE up.user_id = p_user_id;
+
+    -- Fallback to Model 3 (Balanced Growth) if user profile is missing
+    IF v_model_id IS NULL THEN
+        v_model_id := 3;
+        v_investment := COALESCE(p_investment_amount, 250000.00);
+    END IF;
+
+    -- 2. Deactivate previous active portfolio
+    UPDATE user_portfolios 
+    SET is_active = FALSE 
+    WHERE user_id = p_user_id AND is_active = TRUE;
+
+    -- 3. Calculate incremented version number
+    SELECT COALESCE(MAX(version), 0) + 1 INTO v_version
+    FROM user_portfolios
+    WHERE user_id = p_user_id;
+
+    -- 4. Insert new portfolio header (Trigger trg_audit_portfolio fires here)
+    INSERT INTO user_portfolios (user_id, model_id, total_investment, is_active, version, generated_at)
+    VALUES (p_user_id, v_model_id, v_investment, TRUE, v_version, NOW())
+    RETURNING portfolio_id INTO v_portfolio_id;
+
+    -- 5. Insert calculated instrument positions
+    INSERT INTO user_portfolio_positions (portfolio_id, instrument_id, allocation_percentage, allocated_amount)
+    SELECT
+        v_portfolio_id,
+        ia.instrument_id,
+        ROUND(pa.allocation_percentage * ia.allocation_percentage / 100.0, 2),
+        ROUND(v_investment * (pa.allocation_percentage * ia.allocation_percentage / 10000.0), 2)
+    FROM portfolio_allocations pa
+    JOIN sub_allocation_templates sat 
+        ON sat.model_id = pa.model_id AND sat.asset_class_id = pa.asset_class_id
+    JOIN instrument_allocations ia 
+        ON ia.template_id = sat.template_id
+    WHERE pa.model_id = v_model_id;
+
+    -- 6. Update monthly fact snapshot table
+    INSERT INTO fact_monthly_portfolio_snapshots
+        (user_id, snapshot_month, portfolio_id, portfolio_value, asset_class_count, largest_allocation_pct, created_at)
+    SELECT 
+        p_user_id, 
+        date_trunc('month', CURRENT_DATE)::date, 
+        v_portfolio_id,
+        v_investment, 
+        COUNT(DISTINCT i.asset_class_id),
+        COALESCE(MAX(upp.allocation_percentage), 0),
+        NOW()
+    FROM user_portfolio_positions upp
+    JOIN instruments i ON i.instrument_id = upp.instrument_id
+    WHERE upp.portfolio_id = v_portfolio_id
+    ON CONFLICT (user_id, snapshot_month) DO UPDATE SET
+        portfolio_id = EXCLUDED.portfolio_id,
+        portfolio_value = EXCLUDED.portfolio_value,
+        asset_class_count = EXCLUDED.asset_class_count,
+        largest_allocation_pct = EXCLUDED.largest_allocation_pct,
+        created_at = NOW();
+
+    RAISE NOTICE 'Portfolio v% generated successfully (Portfolio ID: %) with total capital ₹%', v_version, v_portfolio_id, v_investment;
+END;
+$$;
+
+
+-- ----------------------------------------------------------------------------
+-- 2. STORED PROCEDURE: Warehouse ETL Refresh for Star Schema
 -- ----------------------------------------------------------------------------
 CREATE OR REPLACE PROCEDURE sp_refresh_monthly_spending_facts(p_user_id TEXT DEFAULT NULL)
 LANGUAGE plpgsql

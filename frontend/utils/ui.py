@@ -19,7 +19,7 @@ def apply_page_style():
             --metric-border: #E2E8F0;
             --input-bg: #FFFFFF;
             --input-border: #CBD5E1;
-            --primary-accent: #2563EB;
+            --primary-accent: #059669;
         }
 
         /* App Background & Typography */
@@ -42,7 +42,7 @@ def apply_page_style():
 
         /* Corporate Gradient Text Accents */
         .vertex-gradient-text {
-            background: linear-gradient(135deg, #0F172A 0%, #1E3A8A 50%, #2563EB 100%);
+            background: linear-gradient(135deg, #0F172A 0%, #047857 50%, #10B981 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             font-weight: 800;
@@ -111,9 +111,9 @@ def apply_page_style():
             border: 1px solid #FDE68A;
         }
         .badge-info {
-            background: #EFF6FF;
-            color: #1D4ED8;
-            border: 1px solid #BFDBFE;
+            background: #ECFDF5;
+            color: #047857;
+            border: 1px solid #A7F3D0;
         }
 
         /* Inputs & Form Controls */
@@ -135,13 +135,13 @@ def apply_page_style():
             font-size: 0.95rem !important;
         }
         .stTextInput input:focus, .stNumberInput input:focus {
-            border-color: #2563EB !important;
-            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2) !important;
+            border-color: #059669 !important;
+            box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.2) !important;
         }
 
         /* Primary Button */
         .stButton>button[kind="primary"] {
-            background: #2563EB !important;
+            background: #059669 !important;
             color: #FFFFFF !important;
             border: none !important;
             border-radius: 8px !important;
@@ -151,7 +151,7 @@ def apply_page_style():
             transition: background-color 0.15s ease !important;
         }
         .stButton>button[kind="primary"]:hover {
-            background: #1D4ED8 !important;
+            background: #047857 !important;
             color: #FFFFFF !important;
         }
 
@@ -181,7 +181,7 @@ def apply_page_style():
         }
         .main [data-testid="stPageLink-NavLink"]:hover {
             background: #F8FAFC !important;
-            border-color: #2563EB !important;
+            border-color: #059669 !important;
         }
         .main [data-testid="stPageLink-NavLink"] a {
             color: #0F172A !important;
@@ -239,7 +239,7 @@ def apply_page_style():
             font-weight: 500 !important;
         }
         section[data-testid="stSidebar"] [data-testid="stSidebarNav"] a:hover span {
-            color: #2563EB !important;
+            color: #059669 !important;
         }
 
         /* Question Item Separator */
@@ -269,8 +269,8 @@ def apply_page_style():
             font-weight: 500;
         }
         .stTabs [aria-selected="true"] {
-            color: #2563EB !important;
-            border-bottom: 2px solid #2563EB !important;
+            color: #059669 !important;
+            border-bottom: 2px solid #059669 !important;
             font-weight: 600;
         }
         </style>

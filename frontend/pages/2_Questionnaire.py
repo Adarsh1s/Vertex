@@ -93,7 +93,7 @@ if "questionnaire_result" in st.session_state:
         <div class="vertex-card" style="text-align: center; padding: 28px; border: 1px solid #BBF7D0; background: #F0FDF4; margin-top: 20px;">
             <div style="font-size: 0.82rem; color: #15803D; text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em;">CALCULATED RISK SCORE</div>
             <div style="font-family: 'Outfit', sans-serif; font-size: 2.8rem; font-weight: 800; color: #15803D; margin: 4px 0;">{score} / 100</div>
-            <div style="font-size: 1.15rem; font-weight: 700; color: #0F172A; margin-bottom: 8px;">Assigned Model: <span style="color: #2563EB;">{profile_name}</span></div>
+            <div style="font-size: 1.15rem; font-weight: 700; color: #0F172A; margin-bottom: 8px;">Assigned Model: <span style="color: #047857;">{profile_name}</span></div>
             <p style="color: #475569; font-size: 0.9rem; max-width: 480px; margin: 0 auto 16px auto;">Your risk score has been permanently linked to your profile in PostgreSQL. You can now generate your versioned investment portfolio.</p>
         </div>
     """, unsafe_allow_html=True)

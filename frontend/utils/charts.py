@@ -3,7 +3,7 @@ import plotly.graph_objects as go
 import pandas as pd
 
 # Professional Financial Palette (Clean, High Contrast, Non-Neon)
-COLOR_PALETTE = ["#2563EB", "#059669", "#D97706", "#4F46E5", "#0891B2", "#64748B"]
+COLOR_PALETTE = ["#059669", "#10B981", "#D97706", "#9333EA", "#EA580C", "#64748B"]
 
 def draw_allocation_pie(summary_data):
     df = pd.DataFrame(summary_data)
@@ -117,7 +117,7 @@ def draw_grouped_comparison_bar(compare_data):
         x='asset_class',
         y='allocation_percentage',
         color='model_name',
-        color_discrete_sequence=["#2563EB", "#059669"],
+        color_discrete_sequence=["#059669", "#D97706"],
         barmode='group',
         labels={'allocation_percentage': 'Allocation (%)', 'model_name': 'Risk Model', 'asset_class': 'Asset Class'}
     )
